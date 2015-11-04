@@ -5,6 +5,8 @@ SpriteNode::SpriteNode()
 	ptr = NULL;
 	sprite = NULL;
 	layer = -1;
+	w_mod = 0;
+	h_mod = 0;
 };
 
 SpriteNode::SpriteNode (Sprite* s, int l, SpriteNode* p)
@@ -24,6 +26,8 @@ SpriteNode::SpriteNode (Sprite* s, int l, SpriteNode* p)
 	layer = l;
 	sprite = s;
 	ptr = p;
+	w_mod = 0;
+	h_mod = 0;
 };
 
 int SpriteNode::get_sheet_x()
@@ -99,6 +103,12 @@ void SpriteNode::set_size (int w, int h)
 	frame_h = h;
 };
 
+void SpriteNode::set_modifiers (int wm, int hm)
+{
+	w_mod = wm;
+	h_mod = hm;
+};
+
 void SpriteNode::set_ptr (SpriteNode* p)
 {
 	ptr = p;
@@ -170,6 +180,7 @@ void SpriteNode::draw (iGraphics* i)
 {
 	sprite->select_frame (sheet_x, sheet_y);
 	sprite->set_position (screen_x, screen_y);
+	sprite->set_modifiers (w_mod, h_mod);
 
 	sprite->draw (i);
 };
@@ -220,14 +231,14 @@ void SpriteNode::print_node_line()
 			};
 		};
 
-		for (int sprite_i = last_backslash+1; sprite->get_path()[sprite_i] != '\0'; sprite_i++, buffer_i++)
+		for (int sprite_i = last_backslash+1; sprite->get_path()[sprite_i] != '.'; sprite_i++, buffer_i++)
 		{
 			buffer[buffer_i] = sprite->get_path()[sprite_i];
 		};
 		buffer[buffer_i] = '\0';
 
 
-		printf ("[%s] @ Layer %d | %d, %d | %d, %d]\n", buffer, layer, screen_x, screen_y-frame_h/2, frame_w, frame_h);
+		printf ("[%s] @ %d : [%d, %d] [%d, %d] [%d x %d]\n", buffer, layer, sheet_x, sheet_y, screen_x, screen_y-frame_h/2, frame_w, frame_h);
 	};
 
 	if (ptr != NULL)

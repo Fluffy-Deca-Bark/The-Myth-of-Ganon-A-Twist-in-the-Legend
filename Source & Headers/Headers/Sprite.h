@@ -23,6 +23,8 @@ class Sprite : public Image
 		int sheet_y;
 		int frame_w;
 		int frame_h;
+		int w_mod;
+		int h_mod;
 		char path[FILE_PATH_SIZE];
 
 	public:
@@ -45,7 +47,10 @@ class Sprite : public Image
 		int get_screen_y();
 		int get_sheet_x();
 		int get_sheet_y();
+		int get_width();
+		int get_height();
 		void select_frame (int x, int y);
+		void set_modifiers (int wm, int hm);
 		void print_path();
 		void print_pos ();
 		void move (int x, int y);

@@ -13,6 +13,7 @@ MapBuilder map_builder;
 iGraphics iGraph;
 Image Ganondorfs_castle;
 LiveSprite Ganondorf (40, 40, 1, 0, 80, 190);
+
 Sprite portal (337, 270);
 Sprite medallion (50, 50);
 Sprite easter_egg (83, 58); //49, 51
@@ -20,6 +21,12 @@ Sprite forest_map (TILE_SIZE, TILE_SIZE);
 Sprite Epona (48, 31);
 Sprite heart (22, 19);
 Sprite rupee (21, 24);
+Sprite mp (1,12);
+
+Sprite spell (260, 260);
+void cast_Dins_Fire();
+void cast_Nayrus_Love();
+
 
 SpriteNode sprite_list_head;
 
@@ -30,21 +37,25 @@ void load_images()
 	char Ganondorfs_castle_path[FILE_PATH_SIZE];
 	//cat_path (Ganondorfs_castle_path, "Level Design\\Casa do Ganondorf\\", "Casa do Ganondorf.png");
 	cat_path (Ganondorfs_castle_path, CO, "Castle with organ and statues.png");
-	Ganondorfs_castle.LoadPNGImage(Ganondorfs_castle_path);
+	Ganondorfs_castle.LoadPNGImage (Ganondorfs_castle_path);
+
+	printf ("Castle: %s\n", Ganondorfs_castle_path);
 	
-	Ganondorf.load (CO, "Ganondorf.png");
+	Ganondorf.load	(CO, "Ganondorf.png");
 	Ganondorf.select_frame (0, 2);
 	Ganondorf.set_position ((SCREEN_WIDTH - Ganondorf.get_frame_w()) / 2 - 8, 345);
-	portal.load (CO, "Portals.png");
-	medallion.load (CO, "Medallions.png");
-	easter_egg.load (CO, "Easter_Eggs.png");
-	forest_map.load(TR, "Floresta 1.png");
-	heart.load (CO, "Heart.png");
-	rupee.load (CO, "Rupee copy.png");
+	portal.load		(CO, "Portal.png");
+	medallion.load	(CO, "Medallion.png");
+	easter_egg.load (CO, "Easter Egg.png");
+	forest_map.load	(TR, "Floresta 1.png");
+	heart.load		(CO, "Heart.png");
+	rupee.load		(CO, "Rupee.png");
+	mp.load (CO, "Mana bar.png");
+	spell.load (CO, "Spell.png");
 
-	Epona.load (CO, "Epona.png");
-	Epona.set_position (360, 230);
+	Epona.load		(CO, "Epona.png");
 	Epona.select_frame (1, 0);
+	Epona.set_position (360, 230);
 };
 
 void main_loop()
@@ -60,11 +71,8 @@ void main_loop()
 	{
 		portal.select_frame (i,0);
 		portal.set_position (-107 + i*120, portal_y);
-		//portal.draw (&iGraph);
 		sprite_list_head.insert_node (&portal, portal.get_sheet_x() == 2 ? 4 : 5);
 	};
-
-		//portal.select_frame (save_state.get_phase()+5, 0);
 
 	portal.set_position (-109 + 5*120, portal_y);
 	switch (save_state.get_phase())
@@ -82,13 +90,10 @@ void main_loop()
 			break;
 
 		case 2:
-			portal.select_frame (7, 0);
+			portal.select_frame (6, 0);
 			sprite_list_head.insert_node (&portal, 5);
 			break;
 	};
-
-		
-		//portal.draw (&iGraph);
 		
 
 	for (int i=0; i<6; i++)
@@ -97,7 +102,6 @@ void main_loop()
 		{
 			medallion.select_frame (i, 0);
 			medallion.set_position (38 + i*120, 220);
-			//medallion.draw (&iGraph);
 			sprite_list_head.insert_node (&medallion, 1);
 		};
 	};
@@ -106,16 +110,13 @@ void main_loop()
 		if (save_state.get_easter_egg(i))
 		{
 			easter_egg.select_frame (i, 0);
-			easter_egg.set_position (19 + (SCREEN_WIDTH / 2) - ((3-i) * 109) - (30 * (3-i>0)), 414); //Último x = 605
-			//prize_table.draw (&iGraph);
+			easter_egg.set_position (19 + (SCREEN_WIDTH / 2) - ((3-i) * 109) - (30 * (3-i>0)), 414);
 			sprite_list_head.insert_node (&easter_egg, 5);
 		};
 
 	if (save_state.light())
 	{
 		int i = 5;
-		//easter_egg.set_position (605, 354);
-		//sprite_list_head.insert_node (&easter_egg, 5);
 		easter_egg.select_frame (i+1, 0);
 		easter_egg.set_position (605, 352);
 		sprite_list_head.insert_node (&easter_egg, 5);
@@ -138,21 +139,22 @@ void main_loop()
 
 
 
-	//Epona.draw (&iGraph);
 	//Epona.set_position ((SCREEN_WIDTH - Epona.get_frame_w()) / 2 - 12, 345);
+	if (Ganondorf.get_screen_x() + Ganondorf.get_frame_w()/2 > Epona.get_screen_x() + Epona.get_frame_w()/2)
+		Epona.select_frame (1, 0);
+	if (Ganondorf.get_screen_x() + Ganondorf.get_frame_w()/2 < Epona.get_screen_x() + Epona.get_frame_w()/2)
+		Epona.select_frame (0, 0);
 	sprite_list_head.insert_node (&Epona, 5);
 
 
 	float hearts = save_state.get_hearts();
 	int whole_hearts = floor (hearts);
 	float fraction = hearts - whole_hearts;
-
-	//printf ("hearts = %0.2f\twhole_hearts = %d\tfraction=%0.2f\n", hearts, whole_hearts, fraction);
-
+	int heart_pad = 21;
 	for (int i=0; i<20; i++)
 	{
-		if (i < 10)				heart.set_position (22*i + 20, 20);
-		else					heart.set_position (22*(i-10) + 20, 40);
+		if (i < 10)				heart.set_position (heart_pad*i + 20, 20);
+		else					heart.set_position (heart_pad*(i-10) + 20, 40);
 		
 
 		if (i < whole_hearts)				heart.select_frame (0, 0);
@@ -170,6 +172,9 @@ void main_loop()
 	};
 
 
+
+
+
 	int total_rupees = save_state.get_rupees();
 	int single_digit_rupees = 0;
 	char rupee_str[4];
@@ -183,27 +188,85 @@ void main_loop()
 	rupee_str[3] = '\0';
 	rupee.set_position (20, SCREEN_HEIGHT - 10);
 	sprite_list_head.insert_node (&rupee, 10);
+	iGraph.SetColor (255,255,255);
 	iGraph.SetTextFont ("Helvetica", 25, 10, 0, 0);
 	iGraph.draw_text (45, SCREEN_HEIGHT - 13, rupee_str);
 
 
 
 
-	//iGraph.draw_point (SCREEN_WIDTH/2, 280);
+
+
+	int casting_Dins_Fire = save_state.get_DF();
+	int casting_Nayrus_Love = save_state.get_NL();
+
+	if (casting_Dins_Fire > 0)
+	{
+		int growth_rate = 2;
+		if (casting_Dins_Fire > 240/2)
+			growth_rate = 4;
+		if (casting_Dins_Fire > 240 * 3/4)
+			growth_rate = 6;
+		spell.set_position (Ganondorf.get_screen_x()+Ganondorf.get_width()/2-spell.get_width()/2, Ganondorf.get_screen_y()-Ganondorf.get_height()/2+spell.get_height()/2);
+		spell.select_frame (0, 0);
+		sprite_list_head.insert_node (&spell, 6);
+		SpriteNode* p;
+		for (p=&sprite_list_head; p->get_sprite()!=(&spell); p=p->get_ptr());
+		p->set_modifiers (casting_Dins_Fire, casting_Dins_Fire);
+		save_state.alter_DF(growth_rate);
+		if (casting_Dins_Fire >= 240)
+			save_state.set_DF (0);
+	};
+
+
 	
+	if (casting_Nayrus_Love > 0)
+	{
+		spell.set_modifiers (70, 70);
+		spell.set_position (Ganondorf.get_screen_x()+Ganondorf.get_width()/2-spell.get_width()/2, Ganondorf.get_screen_y()-Ganondorf.get_height()/2+spell.get_height()/2);
+		spell.select_frame (1, 0);
+		sprite_list_head.insert_node (&spell, 6);
+		SpriteNode* p;
+		for (p=&sprite_list_head; p->get_sprite()!=(&spell); p=p->get_ptr());
+		p->set_modifiers (70, 70);
+		save_state.alter_NL (-1);
+	};
+
+
+
+
+
+
+
+
+	for (int i=0; i<save_state.get_max_mp(); i++)
+	{
+		if (i==0)
+			mp.select_frame (0, 0);
+		else if (i<save_state.get_max_mp()-1)
+		{
+			if (save_state.get_mp() >= i)
+				mp.select_frame (1,0);
+			else
+				mp.select_frame (2,0);
+		}
+		else
+			mp.select_frame (3,0);
+
+		mp.set_position (24 + i, 
+			save_state.get_heart_containers() > 10 ? 55 : 30);
+
+		sprite_list_head.insert_node (&mp, 10);
+	};
+
+
+
+
 
 
 	sprite_list_head.draw_list (&iGraph);
 	//sprite_list_head.print_node_line();
 	sprite_list_head.clear();
-
-	int mana_y = save_state.get_heart_containers() > 10 ? 45 : 30;
-
-	iGraph.SetColor (0.0f, 255.0f, 127.0f);
-	iGraph.fill_rectangle (20, mana_y, 234, mana_y + 10);
-	iGraph.SetColor (255.0f, 255.0f, 255.0f);
-	iGraph.draw_rectangle (20, mana_y, 234, mana_y + 10);
-
 };
 
 int main (void)
@@ -212,7 +275,7 @@ int main (void)
 	
 	if(1)
 	{
-		iGraph.CreateMainWindow (SCREEN_WIDTH, SCREEN_HEIGHT, "A Lust for Power");
+		iGraph.CreateMainWindow (SCREEN_WIDTH, SCREEN_HEIGHT, "The Myth of Ganon: A Twist in the Legend");
 		iGraph.SetKeyboardInput(KeyboardInput);
 		iGraph.SetBackgroundColor (26,32,40);
 		load_images();
@@ -266,12 +329,36 @@ void KeyboardInput(int key, int state, int x, int y)
 
 			case ('b'): save_state.alter_hearts (-0.25f); break;
 			case ('n'): save_state.alter_hearts (0.25f); break;
+			
+			case (','): save_state.alter_mp (-5); break;
+			case ('.'): save_state.alter_mp (5); break;
+
+			case ('e'): cast_Dins_Fire(); break;
+			case ('w') : cast_Nayrus_Love(); break;
 		};
 
 		if (key>='5' && key<='9')
 			save_state.tweak_easter_egg (key-'5');
 		if (key=='0')
 			save_state.tweak_easter_egg (5);
+	};
+};
+
+void cast_Dins_Fire()
+{
+	if (save_state.get_mp() >= 40.0f)
+	{
+		save_state.alter_mp (-40.0f);
+		save_state.set_DF (1);
+	};
+};
+
+void cast_Nayrus_Love()
+{
+	if (save_state.get_mp() >= 40.0f)
+	{
+		save_state.alter_mp (-40.0f);
+		save_state.set_NL (1200);
 	};
 };
 

@@ -5,6 +5,9 @@
 
 SaveState::SaveState()
 {
+	casting_Dins_Fire = 0;
+	casting_Nayrus_Love = 0;
+	casting_Farores_Wind = 0;
 	load_file();
 };
 
@@ -287,6 +290,10 @@ void SaveState::graphics_print_table (Graphics g) // Corrigir todas as tabulaçõe
 
 void SaveState::alter_hearts (float h)
 {
+	if (h < 0 && casting_Nayrus_Love > 0)
+		return;
+
+
 	if (hearts + h >= get_heart_containers())
 		hearts = get_heart_containers();
 	else if (hearts + h <= 0.0f)
@@ -310,5 +317,59 @@ void SaveState::alter_rupees (int r)
 		rupees = MAX_RUPEES;
 };
 
+void SaveState::alter_mp (float p)
+{
+	if (mp+p >= 0 && mp+p <= max_mp)
+		mp += p;
+	else if (mp+p < 0)
+		mp = 0;
+	else if (mp+p > max_mp)
+		mp = max_mp;
+};
+
+int SaveState::get_DF()
+{
+	return casting_Dins_Fire;
+};
+
+int SaveState::get_NL()
+{
+	return casting_Nayrus_Love;
+};
+
+int SaveState::get_FW()
+{
+	return casting_Farores_Wind;
+};
+
+void SaveState::set_DF (int n)
+{
+	casting_Dins_Fire = n;
+};
+
+void SaveState::set_NL (int n)
+{
+	casting_Nayrus_Love = n;
+};
+
+void SaveState::set_FW (int n)
+{
+	casting_Farores_Wind = n;
+};
+
+void SaveState::alter_DF (int n)
+{
+	casting_Dins_Fire += n;
+};
+
+void SaveState::alter_NL (int n)
+{
+	casting_Nayrus_Love += n;
+};
+
+void SaveState::alter_FW (int n)
+{
+	casting_Farores_Wind;
+};
 
 #endif

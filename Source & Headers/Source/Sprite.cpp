@@ -9,6 +9,8 @@ Sprite::Sprite (int w, int h)
 {
 	frame_w = w;
 	frame_h = h;
+	w_mod = 0;
+	h_mod = 0;
 };
 
 Sprite::Sprite (int w, int h, const char* p)
@@ -19,6 +21,9 @@ Sprite::Sprite (int w, int h, const char* p)
 
 	for (int i=0; p[i]!='\0'; i++)
 		path[i] = p[i];
+
+	w_mod = 0;
+	h_mod = 0;
 };
 
 Sprite::Sprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, int screen_Y)
@@ -29,6 +34,8 @@ Sprite::Sprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, int screen
 	sheet_y = sheet_Y;
 	screen_x = screen_X;
 	screen_y = screen_Y;
+	w_mod = 0;
+	h_mod = 0;
 };
 
 void Sprite::set_frame_w (int w)
@@ -81,6 +88,22 @@ int Sprite::get_sheet_y()
 	return sheet_y;
 };
 
+int Sprite::get_width()
+{
+	if (w_mod == 0)
+		return frame_w;
+
+	return w_mod;
+};
+
+int Sprite::get_height()
+{
+	if (h_mod == 0)
+		return frame_h;
+
+	return h_mod;
+};
+
 void Sprite::select_frame (int x, int y)
 {
 	sheet_x = x;
@@ -127,7 +150,10 @@ void Sprite::draw (iGraphics* i)
 	int cx = sheet_x * frame_w;
 	int cy = sheet_y * frame_h;
 
-	i->draw_image (screen_x, screen_y, frame_w, frame_h, cx, cy, frame_w, frame_h, *this);
+	int dw = (w_mod == 0) ? frame_w : w_mod;
+	int dh = (h_mod == 0) ? frame_h : h_mod;
+
+	i->draw_image (screen_x, screen_y, dw, dh, cx, cy, frame_w, frame_h, *this);
 };
 
 void Sprite::move (int x, int y)
@@ -235,4 +261,10 @@ void Sprite::move (int n, axis a)
 char* Sprite::get_path()
 {
 	return path;
+};
+
+void Sprite::set_modifiers (int wm, int hm)
+{
+	w_mod = wm;
+	h_mod = hm;
 };

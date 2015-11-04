@@ -6,14 +6,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#define GABRIEL_PATH	""
-#define JOQAUIM_PATH	""
-#define LEONARDO_PATH	""
-#define LUCCA_PATH		""
-#define ROBERTO_PATH	""
-#define VINICIUS_PATH	"\\\\Mac\\Home\\Projects\\A-Lust-for-Power\\"
-
-#define PROJECT_PATH VINICIUS_PATH
+#define PROJECT_PATH "\\\\Mac\\Home\\Projects\\The-Myth-of-Ganon-A-Twist-in-the-Legend\\"
 
 #define SCREEN_WIDTH (736)
 #define SCREEN_HEIGHT (448)

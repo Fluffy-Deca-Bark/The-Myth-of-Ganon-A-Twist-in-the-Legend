@@ -12,6 +12,8 @@ class SpriteNode
 		int screen_y;
 		int frame_w;
 		int frame_h;
+		int w_mod;
+		int h_mod;
 		int layer;
 
 		SpriteNode* ptr;
@@ -38,6 +40,7 @@ class SpriteNode
 		void select_frame (int x, int y);
 		void set_position (int x, int y);
 		void set_size (int w, int h);
+		void set_modifiers (int wm, int hm);
 
 		void set_ptr (SpriteNode* p);
 		void set_sprite (Sprite* s);

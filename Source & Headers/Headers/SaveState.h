@@ -20,6 +20,11 @@ class SaveState
 		bool spell[3];
 		bool easter_egg[7];
 		int phase;
+
+		int casting_Dins_Fire;
+		int casting_Nayrus_Love;
+		int casting_Farores_Wind;
+
 	
 	public:
 	
@@ -55,10 +60,22 @@ class SaveState
 		void set_hearts (float h);
 
 		void alter_rupees (int r);
-
+		void alter_mp (float p);
 		void print_report();
 		void print_table();
 		void graphics_print_table (Graphics g);
+
+		int get_DF();
+		int get_NL();
+		int get_FW();
+
+		void set_DF (int n);
+		void set_NL (int n);
+		void set_FW (int n);
+
+		void alter_DF (int n);
+		void alter_NL (int n);
+		void alter_FW (int n);
 };
 
 #endif /* defined(__SaveState__) */
