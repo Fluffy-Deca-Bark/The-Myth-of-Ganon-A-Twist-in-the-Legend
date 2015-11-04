@@ -8,13 +8,18 @@ SaveState::SaveState()
 	casting_Dins_Fire = 0;
 	casting_Nayrus_Love = 0;
 	casting_Farores_Wind = 0;
-	load_file();
+	//load_file();
+	read_file();
 };
 
-//void save_file();
+/*
+void save_file()
+{
 
+};
+*/
 
-void SaveState::load_file()
+void SaveState::read_file()
 {
 	FILE * pFile;
 	char line_buffer[100];
@@ -35,6 +40,8 @@ void SaveState::load_file()
 	{
 		file_good = true;
 
+		fgets(line_buffer, size, pFile);
+
 		if (fgets(line_buffer, size, pFile) != NULL)
 		{
 			for (int i = 0; i < 6; i++)
@@ -42,6 +49,9 @@ void SaveState::load_file()
 				temples[i] = line_buffer[i] == '1' ? true : false;
 			};
 		};
+
+		fgets(line_buffer, size, pFile);
+
 
 		if (!(forest() && fire() && water() && spirit() && shadow()))
 		{
@@ -51,12 +61,15 @@ void SaveState::load_file()
 		else
 		{
 			if (!light())
-				phase=1;
+				phase = 1;
 			else
-				phase=2;
+				phase = 2;
 		};
 
 		//printf ("Loading save file... Phase = %d\n\n", phase);
+
+		fgets(line_buffer, size, pFile);
+
 		
 		if (fgets(line_buffer, size, pFile) != NULL)
 		{
@@ -65,18 +78,36 @@ void SaveState::load_file()
 				heart_container[i] = line_buffer[i] == '1' ? true : false;
 			};
 		};
+
+		fgets(line_buffer, size, pFile);
+
 	
 		fgets (line_buffer , size, pFile);
 		
 		if (fgets (line_buffer , size , pFile) != NULL) hearts = atof(line_buffer);
+
+		fgets(line_buffer, size, pFile);
+
 		
 		if (fgets (line_buffer , size, pFile) != NULL) mp = atof(line_buffer);
+
+		fgets(line_buffer, size, pFile);
+
 		
 		if (fgets (line_buffer , size, pFile) != NULL) max_mp = atof(line_buffer);
 
+		fgets(line_buffer, size, pFile);
+
+
 		if (fgets(line_buffer, size, pFile) != NULL) max_stamina = atof(line_buffer);
 
+		fgets(line_buffer, size, pFile);
+
+
 		if (fgets (line_buffer , size, pFile) != NULL) rupees = atoi(line_buffer);
+
+		fgets(line_buffer, size, pFile);
+
 
 		if (fgets(line_buffer, size, pFile) != NULL)
 		{
@@ -85,6 +116,9 @@ void SaveState::load_file()
 				spell[i] = line_buffer[i] == '1' ? true : false;
 			};
 		};
+
+		fgets(line_buffer, size, pFile);
+
 
 		if (fgets(line_buffer, size, pFile) != NULL)
 		{
@@ -97,10 +131,10 @@ void SaveState::load_file()
 		
 		fclose (pFile);
 	};
-	
 };
 
-bool SaveState::get_temple(int t)		{ return temples[t];		};
+
+bool SaveState::get_temple (int t)		{ return temples[t];		};
 float SaveState::get_hearts()			{ return hearts;			};
 float SaveState::get_mp()				{ return mp;				};
 float SaveState::get_max_mp()			{ return max_mp;			};
@@ -307,6 +341,17 @@ void SaveState::set_hearts (float h)
 	hearts = h;
 };
 
+void SaveState::gain_heart_container (int h)
+{
+	heart_container[h] = true;
+};
+
+void SaveState::lose_heart_container (int h)
+{
+	heart_container[h] = false;
+};
+
+
 void SaveState::alter_rupees (int r)
 {
 	if (rupees+r >= 0 && rupees+r <= MAX_RUPEES)
@@ -369,7 +414,7 @@ void SaveState::alter_NL (int n)
 
 void SaveState::alter_FW (int n)
 {
-	casting_Farores_Wind;
+	casting_Farores_Wind += n;
 };
 
 #endif

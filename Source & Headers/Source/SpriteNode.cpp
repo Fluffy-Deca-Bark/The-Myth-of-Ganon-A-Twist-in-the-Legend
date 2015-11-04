@@ -181,8 +181,18 @@ void SpriteNode::draw (iGraphics* i)
 	sprite->select_frame (sheet_x, sheet_y);
 	sprite->set_position (screen_x, screen_y);
 	sprite->set_modifiers (w_mod, h_mod);
-
-	sprite->draw (i);
+	
+	
+	char* buffer = NULL;
+	buffer = sprite->get_name (buffer);
+	if (strcmp (buffer, "Spell") == 0 && sheet_x == 1) // Nayru's Love
+	{
+		i->RotateBegin (0 % 360);
+		sprite->draw (i);
+		i->RotateEnd();
+	}
+	else
+		sprite->draw (i);
 };
 
 void SpriteNode::print_node()
@@ -212,31 +222,8 @@ void SpriteNode::print_node_line()
 	}
 	else
 	{
-		int last_backslash = 0;
-		int explorer = 0;
-		int buffer_i = 0;
-		char buffer [40]; // Arbitrário
-
-		for (;;)
-		{
-			explorer++;
-			if (sprite->get_path()[explorer] == '\\')
-			{
-				last_backslash = explorer;
-				continue;
-			}
-			else if (sprite->get_path()[explorer] == '\0')
-			{
-				break;
-			};
-		};
-
-		for (int sprite_i = last_backslash+1; sprite->get_path()[sprite_i] != '.'; sprite_i++, buffer_i++)
-		{
-			buffer[buffer_i] = sprite->get_path()[sprite_i];
-		};
-		buffer[buffer_i] = '\0';
-
+		char* buffer = NULL;
+		buffer = sprite->get_name (buffer);
 
 		printf ("[%s] @ %d : [%d, %d] [%d, %d] [%d x %d]\n", buffer, layer, sheet_x, sheet_y, screen_x, screen_y-frame_h/2, frame_w, frame_h);
 	};

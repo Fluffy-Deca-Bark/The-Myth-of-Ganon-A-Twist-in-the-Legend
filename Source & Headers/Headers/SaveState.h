@@ -28,10 +28,10 @@ class SaveState
 	
 	public:
 	
-		SaveState ();
+		SaveState();
 	
 		//void save_file();
-		void load_file();
+		void read_file();
 	
 		bool get_temple (int t);
 		float get_hearts();
@@ -58,6 +58,9 @@ class SaveState
 		
 		void alter_hearts (float h);
 		void set_hearts (float h);
+
+		void gain_heart_container (int h);
+		void lose_heart_container (int h);
 
 		void alter_rupees (int r);
 		void alter_mp (float p);

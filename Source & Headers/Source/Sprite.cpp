@@ -263,6 +263,38 @@ char* Sprite::get_path()
 	return path;
 };
 
+char* Sprite::get_name (char* buffer)
+{
+	int last_backslash = 0;
+	int explorer = 0;
+	int buffer_i = 0;
+	
+	//delete buffer;
+	buffer = new char[40];
+
+	for (;;)
+	{
+		explorer++;
+		if (path[explorer] == '\\')
+		{
+			last_backslash = explorer;
+			continue;
+		}
+		else if (path[explorer] == '\0')
+		{
+			break;
+		};
+	};
+
+	for (int path_i = last_backslash+1; path[path_i] != '.'; path_i++, buffer_i++)
+	{
+		buffer[buffer_i] = path[path_i];
+	};
+	buffer[buffer_i] = '\0';
+
+	return buffer;
+};
+
 void Sprite::set_modifiers (int wm, int hm)
 {
 	w_mod = wm;

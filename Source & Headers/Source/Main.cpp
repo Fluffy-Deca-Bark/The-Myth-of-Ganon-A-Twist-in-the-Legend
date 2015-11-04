@@ -26,6 +26,9 @@ Sprite mp (1,12);
 Sprite spell (260, 260);
 void cast_Dins_Fire();
 void cast_Nayrus_Love();
+void cast_Farores_Wind();
+int FW_x = -1;
+int FW_y = -1;
 
 
 SpriteNode sprite_list_head;
@@ -39,8 +42,7 @@ void load_images()
 	cat_path (Ganondorfs_castle_path, CO, "Castle with organ and statues.png");
 	Ganondorfs_castle.LoadPNGImage (Ganondorfs_castle_path);
 
-	printf ("Castle: %s\n", Ganondorfs_castle_path);
-	
+
 	Ganondorf.load	(CO, "Ganondorf.png");
 	Ganondorf.select_frame (0, 2);
 	Ganondorf.set_position ((SCREEN_WIDTH - Ganondorf.get_frame_w()) / 2 - 8, 345);
@@ -132,7 +134,8 @@ void main_loop()
 		{
 			forest_map.set_position (current_node->get_screen_x(), current_node->get_screen_y());
 			forest_map.select_frame (current_node->get_sheet_x(), current_node->get_sheet_y());
-			forest_map.draw (&iGraph);
+			//forest_map.draw (&iGraph);
+			sprite_list_head.insert_node (&forest_map, 3);
 			current_node = current_node->get_ptr();
 		};
 	};
@@ -145,6 +148,9 @@ void main_loop()
 	if (Ganondorf.get_screen_x() + Ganondorf.get_frame_w()/2 < Epona.get_screen_x() + Epona.get_frame_w()/2)
 		Epona.select_frame (0, 0);
 	sprite_list_head.insert_node (&Epona, 5);
+
+
+
 
 
 	float hearts = save_state.get_hearts();
@@ -199,6 +205,7 @@ void main_loop()
 
 	int casting_Dins_Fire = save_state.get_DF();
 	int casting_Nayrus_Love = save_state.get_NL();
+	int casting_Farores_Wind = save_state.get_FW();
 
 	if (casting_Dins_Fire > 0)
 	{
@@ -222,6 +229,7 @@ void main_loop()
 	
 	if (casting_Nayrus_Love > 0)
 	{
+		static int angle = 0;
 		spell.set_modifiers (70, 70);
 		spell.set_position (Ganondorf.get_screen_x()+Ganondorf.get_width()/2-spell.get_width()/2, Ganondorf.get_screen_y()-Ganondorf.get_height()/2+spell.get_height()/2);
 		spell.select_frame (1, 0);
@@ -233,6 +241,30 @@ void main_loop()
 	};
 
 
+	if (save_state.get_FW() != 0)
+	{
+		spell.select_frame (2, 0);
+		spell.set_position (
+			FW_x + Ganondorf.get_frame_w()/2 - spell.get_frame_w()/2,
+			FW_y - Ganondorf.get_frame_h() + spell.get_frame_h()/2 + 20
+			);
+		spell.set_modifiers (save_state.get_FW(), save_state.get_FW());
+		save_state.alter_FW (1);
+		if (save_state.get_FW() >= 60)
+			save_state.set_FW (0);
+		sprite_list_head.insert_node (&spell, 5);
+	};
+
+
+	if (FW_x != -1)
+	{
+		spell.select_frame (2, 1);
+		spell.set_position (
+			FW_x + Ganondorf.get_frame_w()/2 - spell.get_frame_w()/2,
+			FW_y - Ganondorf.get_frame_h() + spell.get_frame_h()/2 + 20
+			);
+		sprite_list_head.insert_node (&spell, 5);
+	};
 
 
 
@@ -254,11 +286,10 @@ void main_loop()
 			mp.select_frame (3,0);
 
 		mp.set_position (24 + i, 
-			save_state.get_heart_containers() > 10 ? 55 : 30);
+			save_state.get_heart_containers() > 10 ? 55 : 36);
 
 		sprite_list_head.insert_node (&mp, 10);
 	};
-
 
 
 
@@ -271,7 +302,7 @@ void main_loop()
 
 int main (void)
 {
-	//save_state.print_table();
+	save_state.print_table();
 	
 	if(1)
 	{
@@ -333,8 +364,12 @@ void KeyboardInput(int key, int state, int x, int y)
 			case (','): save_state.alter_mp (-5); break;
 			case ('.'): save_state.alter_mp (5); break;
 
-			case ('e'): cast_Dins_Fire(); break;
+			case ('e') : cast_Dins_Fire(); break;
 			case ('w') : cast_Nayrus_Love(); break;
+			case ('q') : cast_Farores_Wind(); break;
+
+			case ('a'): save_state.gain_heart_container (16); break;
+			case ('s'): save_state.lose_heart_container (16); break;
 		};
 
 		if (key>='5' && key<='9')
@@ -359,6 +394,32 @@ void cast_Nayrus_Love()
 	{
 		save_state.alter_mp (-40.0f);
 		save_state.set_NL (1200);
+	};
+};
+
+void cast_Farores_Wind()
+{
+	int cost_to_set = 20;
+	int cost_to_warp = 50;
+
+	if (FW_x == -1 && FW_y == -1)
+	{
+		if (save_state.get_mp() < cost_to_set)
+			return;
+		FW_x = Ganondorf.get_screen_x();
+		FW_y = Ganondorf.get_screen_y();
+		save_state.alter_mp (-cost_to_set);
+		save_state.set_FW (1);
+	}
+	else
+	{
+		if (save_state.get_mp() < cost_to_warp)
+			return;
+		Ganondorf.set_position (FW_x, FW_y);
+		save_state.alter_mp (-50);
+		FW_x = -1;
+		FW_y = -1;
+		Ganondorf.select_frame (0, 0);
 	};
 };
 

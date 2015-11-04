@@ -1,19 +1,18 @@
-111111
-11001001110111010
-2.75
-80.0
+- Temples -
+001000
+- Heart containers -
+11111110000000000
+- Hearts -
+19.75
+- Mana -
+190.0
+- Max mana -
 200.0
+- Max stamina -
 100.0
-713
-100
-1111111
-
-Temples
-Heart containers
-Hearts
-MP
-Max. MP
-Max. Stamina
-Rupees
-Spells
-Easter Eggs
+- Rupees -
+123
+- Spells -
+111
+- Easter eggs -
+000000
