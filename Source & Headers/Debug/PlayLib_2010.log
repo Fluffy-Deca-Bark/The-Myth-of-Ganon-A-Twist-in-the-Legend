@@ -1,21 +1,19 @@
-﻿Build started 2015-11-04 7:20:23 PM.
+﻿Build started 2015-11-05 3:39:07 AM.
      1>Project "Z:\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\PlayLib_2010.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\PlayLib_2010.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"\\Mac\Home\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\Headers" /I"\\Mac\Home\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\etc" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Main.cpp Source\SpriteNode.cpp
-         SpriteNode.cpp
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"\\Mac\Home\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\Headers" /I"\\Mac\Home\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\etc" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Main.cpp
          Main.cpp
-     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(157): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(189): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(327): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(177): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(209): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(381): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
-     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(328): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(382): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files\microsoft visual studio 10.0\vc\include\string.h(110) : see declaration of 'strcat'
-     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(329): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(383): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files\microsoft visual studio 10.0\vc\include\string.h(110) : see declaration of 'strcat'
-     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(411): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-         Generating Code...
+     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(465): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -50,4 +48,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.55
+Time Elapsed 00:00:05.67

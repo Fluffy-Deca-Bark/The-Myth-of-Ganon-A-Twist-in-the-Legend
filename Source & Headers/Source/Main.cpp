@@ -22,13 +22,24 @@ Sprite Epona (48, 31);
 Sprite heart (22, 19);
 Sprite rupee (21, 24);
 Sprite mp (1,12);
+Sprite keyboard (56, 49);
+Sprite box (260, 260);
 
 Sprite spell (260, 260);
+
+Sprite dins_fire (260, 260);
+Sprite nayrus_love (260, 260);
+Sprite farores_wind (260, 260);
+Sprite f_wind_warpball (260, 260);
+Sprite warp (260, 260);
 void cast_Dins_Fire();
 void cast_Nayrus_Love();
 void cast_Farores_Wind();
 int FW_x = -1;
 int FW_y = -1;
+int FW_stretch = 0;
+int warping_animation = 0;
+bool Ganondorf_visible = true;
 
 
 SpriteNode sprite_list_head;
@@ -52,8 +63,16 @@ void load_images()
 	forest_map.load	(TR, "Floresta 1.png");
 	heart.load		(CO, "Heart.png");
 	rupee.load		(CO, "Rupee.png");
-	mp.load (CO, "Mana bar.png");
-	spell.load (CO, "Spell.png");
+	mp.load			(CO, "Mana bar.png");
+	spell.load		(CO, "Spell.png");
+	dins_fire.load	(CO, "Spell.png");
+	nayrus_love.load(CO, "Spell.png");
+	farores_wind.load(CO, "Spell.png");
+	f_wind_warpball.load (CO, "Spell.png");
+	warp.load		(CO, "Spell.png");
+	keyboard.load	(CO, "Keys with spells.png");
+	box.load		(CO, "White Square.png");
+
 
 	Epona.load		(CO, "Epona.png");
 	Epona.select_frame (1, 0);
@@ -65,7 +84,8 @@ void main_loop()
 	iGraph.DrawImage2D (0,0,736,448,0,0,736,448,Ganondorfs_castle);
 	//Ganondorf.draw (&iGraph);
 	//Ganondorf.print_pos();
-	sprite_list_head.insert_node (&Ganondorf, 5);
+	if (Ganondorf_visible)
+		sprite_list_head.insert_node (&Ganondorf, 5);
 
 	int portal_y = 280;
 
@@ -214,11 +234,11 @@ void main_loop()
 			growth_rate = 4;
 		if (casting_Dins_Fire > 240 * 3/4)
 			growth_rate = 6;
-		spell.set_position (Ganondorf.get_screen_x()+Ganondorf.get_width()/2-spell.get_width()/2, Ganondorf.get_screen_y()-Ganondorf.get_height()/2+spell.get_height()/2);
-		spell.select_frame (0, 0);
-		sprite_list_head.insert_node (&spell, 6);
+		dins_fire.set_position (Ganondorf.get_screen_x()+Ganondorf.get_width()/2-dins_fire.get_width()/2, Ganondorf.get_screen_y()-Ganondorf.get_height()/2+dins_fire.get_height()/2);
+		dins_fire.select_frame (0, 0);
+		sprite_list_head.insert_node (&dins_fire, 6);
 		SpriteNode* p;
-		for (p=&sprite_list_head; p->get_sprite()!=(&spell); p=p->get_ptr());
+		for (p=&sprite_list_head; p->get_sprite()!=(&dins_fire); p=p->get_ptr());
 		p->set_modifiers (casting_Dins_Fire, casting_Dins_Fire);
 		save_state.alter_DF(growth_rate);
 		if (casting_Dins_Fire >= 240)
@@ -230,43 +250,51 @@ void main_loop()
 	if (casting_Nayrus_Love > 0)
 	{
 		static int angle = 0;
-		spell.set_modifiers (70, 70);
-		spell.set_position (Ganondorf.get_screen_x()+Ganondorf.get_width()/2-spell.get_width()/2, Ganondorf.get_screen_y()-Ganondorf.get_height()/2+spell.get_height()/2);
-		spell.select_frame (1, 0);
-		sprite_list_head.insert_node (&spell, 6);
+		nayrus_love.set_modifiers (70, 70);
+		nayrus_love.set_position (Ganondorf.get_screen_x()+Ganondorf.get_width()/2-nayrus_love.get_width()/2, Ganondorf.get_screen_y()-Ganondorf.get_height()/2+nayrus_love.get_height()/2);
+		nayrus_love.select_frame (1, 0);
+		sprite_list_head.insert_node (&nayrus_love, 6);
 		SpriteNode* p;
-		for (p=&sprite_list_head; p->get_sprite()!=(&spell); p=p->get_ptr());
+		for (p=&sprite_list_head; p->get_sprite()!=(&nayrus_love); p=p->get_ptr());
 		p->set_modifiers (70, 70);
 		save_state.alter_NL (-1);
 	};
 
 
-	if (save_state.get_FW() != 0)
+	if (casting_Farores_Wind > 0)
 	{
-		spell.select_frame (2, 0);
-		spell.set_position (
-			FW_x + Ganondorf.get_frame_w()/2 - spell.get_frame_w()/2,
-			FW_y - Ganondorf.get_frame_h() + spell.get_frame_h()/2 + 20
-			);
-		spell.set_modifiers (save_state.get_FW(), save_state.get_FW());
-		save_state.alter_FW (1);
-		if (save_state.get_FW() >= 60)
+		if (casting_Farores_Wind < 260)
+			FW_stretch = casting_Farores_Wind;
+		else
+			FW_stretch = 260;
+
+		int growth_rate = 10;
+		int FW_limit = 380;
+		if (casting_Farores_Wind > FW_limit/2)
+			growth_rate = 1;
+		farores_wind.set_position (Ganondorf.get_screen_x()+Ganondorf.get_width()/2-farores_wind.get_width()/2, Ganondorf.get_screen_y()-Ganondorf.get_height()/2+farores_wind.get_height()/2 + 15);
+		farores_wind.select_frame (2, 0);
+		sprite_list_head.insert_node (&farores_wind, 6);
+		SpriteNode* p;
+		for (p=&sprite_list_head; p->get_sprite()!=(&farores_wind); p=p->get_ptr());
+		p->set_modifiers (FW_stretch, FW_stretch);
+		save_state.alter_FW(growth_rate);
+		if (casting_Farores_Wind >= FW_limit)
 			save_state.set_FW (0);
-		sprite_list_head.insert_node (&spell, 5);
 	};
 
 
 	if (FW_x != -1)
 	{
-		spell.select_frame (2, 1);
-		spell.set_position (
-			FW_x + Ganondorf.get_frame_w()/2 - spell.get_frame_w()/2,
-			FW_y - Ganondorf.get_frame_h() + spell.get_frame_h()/2 + 20
+		warp.select_frame (2, 1);
+		warp.set_position (
+			FW_x + Ganondorf.get_frame_w()/2 - warp.get_frame_w()/2,
+			FW_y - Ganondorf.get_frame_h() + warp.get_frame_h()/2 + 20
 			);
-		sprite_list_head.insert_node (&spell, 5);
+		if (casting_Farores_Wind > 50 || casting_Farores_Wind == 0)
+			sprite_list_head.insert_node (&warp, 7);
 	};
-
-
+	
 
 
 
@@ -295,9 +323,35 @@ void main_loop()
 
 
 
+
+	keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*3 - 10, 10 + keyboard.get_height());
+	keyboard.select_frame (0, 0);
+	sprite_list_head.insert_node (&keyboard, 10);
+
+	keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*2 - 10, 10 + keyboard.get_height());
+	keyboard.select_frame (1, 0);
+	sprite_list_head.insert_node (&keyboard, 10);
+
+	keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*1 - 10, 10 + keyboard.get_height());
+	keyboard.select_frame (2, 0);
+	sprite_list_head.insert_node (&keyboard, 10);
+
+
+
+	
+
+
 	sprite_list_head.draw_list (&iGraph);
 	//sprite_list_head.print_node_line();
 	sprite_list_head.clear();
+
+	/*iGraph.SetColor (0, 255, 255);
+	iGraph.draw_rectangle (
+		Ganondorf.get_screen_x(), 
+		Ganondorf.get_screen_y(),
+		Ganondorf.get_screen_x() + Ganondorf.get_width(),
+		Ganondorf.get_screen_y() - Ganondorf.get_height()
+		);*/
 };
 
 int main (void)
@@ -402,7 +456,7 @@ void cast_Farores_Wind()
 	int cost_to_set = 20;
 	int cost_to_warp = 50;
 
-	if (FW_x == -1 && FW_y == -1)
+	if (FW_x == -1)
 	{
 		if (save_state.get_mp() < cost_to_set)
 			return;
@@ -420,6 +474,7 @@ void cast_Farores_Wind()
 		FW_x = -1;
 		FW_y = -1;
 		Ganondorf.select_frame (0, 0);
+		save_state.set_FW (0);
 	};
 };
 

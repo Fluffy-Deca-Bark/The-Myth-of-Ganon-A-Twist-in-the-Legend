@@ -26,8 +26,8 @@ SpriteNode::SpriteNode (Sprite* s, int l, SpriteNode* p)
 	layer = l;
 	sprite = s;
 	ptr = p;
-	w_mod = 0;
-	h_mod = 0;
+	w_mod = s->get_width();
+	h_mod = s->get_height();
 };
 
 int SpriteNode::get_sheet_x()
