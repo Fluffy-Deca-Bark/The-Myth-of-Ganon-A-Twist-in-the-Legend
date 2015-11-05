@@ -23,7 +23,10 @@ Sprite heart (22, 19);
 Sprite rupee (21, 24);
 Sprite mp (1,12);
 Sprite keyboard (56, 49);
+Sprite keyboard_sp (168, 49);
 Sprite box (260, 260);
+
+bool keys_visible = true;
 
 Sprite spell (260, 260);
 
@@ -32,14 +35,17 @@ Sprite nayrus_love (260, 260);
 Sprite farores_wind (260, 260);
 Sprite f_wind_warpball (260, 260);
 Sprite warp (260, 260);
+void scan_virtual_keyboard();
 void cast_Dins_Fire();
 void cast_Nayrus_Love();
 void cast_Farores_Wind();
+bool is_casting();
 int FW_x = -1;
 int FW_y = -1;
 int FW_stretch = 0;
 int warping_animation = 0;
 bool Ganondorf_visible = true;
+bool keyboard_key[256];
 
 
 SpriteNode sprite_list_head;
@@ -71,6 +77,7 @@ void load_images()
 	f_wind_warpball.load (CO, "Spell.png");
 	warp.load		(CO, "Spell.png");
 	keyboard.load	(CO, "Keys with spells.png");
+	keyboard_sp.load(CO, "Keys with spells.png");
 	box.load		(CO, "White Square.png");
 
 
@@ -81,6 +88,8 @@ void load_images()
 
 void main_loop()
 {
+	scan_virtual_keyboard();
+
 	iGraph.DrawImage2D (0,0,736,448,0,0,736,448,Ganondorfs_castle);
 	//Ganondorf.draw (&iGraph);
 	//Ganondorf.print_pos();
@@ -240,7 +249,7 @@ void main_loop()
 		SpriteNode* p;
 		for (p=&sprite_list_head; p->get_sprite()!=(&dins_fire); p=p->get_ptr());
 		p->set_modifiers (casting_Dins_Fire, casting_Dins_Fire);
-		save_state.alter_DF(growth_rate);
+		save_state.alter_DF (growth_rate);
 		if (casting_Dins_Fire >= 240)
 			save_state.set_DF (0);
 	};
@@ -322,28 +331,44 @@ void main_loop()
 
 
 
+	if (keys_visible)
+	{
+
+		//Farore's Wind
+		keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*3 - 10, 10 + keyboard.get_height());
+		keyboard.select_frame (0, 0);
+		sprite_list_head.insert_node (&keyboard, 10);
+
+		// Nayru's Love
+		keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*2 - 10, 10 + keyboard.get_height());
+		keyboard.select_frame (1, 0);
+		sprite_list_head.insert_node (&keyboard, 10);
+
+		// Din's Fire
+		keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*1 - 10, 10 + keyboard.get_height());
+		keyboard.select_frame (2, 0);
+		sprite_list_head.insert_node (&keyboard, 10);
+
+		// Shift
+		/*keyboard_sp.set_position (SCREEN_WIDTH - keyboard.get_width()*3 - 10, 10 + keyboard_sp.get_height()*2 + 5);
+		keyboard_sp.select_frame (0, 3);
+		sprite_list_head.insert_node (&keyboard_sp, 10);*/
+
+		// Tab
+		/*keyboard_sp.set_position (SCREEN_WIDTH - keyboard.get_width()*6 - 10, 10 + keyboard_sp.get_height());
+		keyboard_sp.select_frame (0, 4);
+		sprite_list_head.insert_node (&keyboard_sp, 10);*/
+	};
 
 
-	keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*3 - 10, 10 + keyboard.get_height());
-	keyboard.select_frame (0, 0);
-	sprite_list_head.insert_node (&keyboard, 10);
 
-	keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*2 - 10, 10 + keyboard.get_height());
-	keyboard.select_frame (1, 0);
-	sprite_list_head.insert_node (&keyboard, 10);
-
-	keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*1 - 10, 10 + keyboard.get_height());
-	keyboard.select_frame (2, 0);
-	sprite_list_head.insert_node (&keyboard, 10);
-
-
-
-	
 
 
 	sprite_list_head.draw_list (&iGraph);
 	//sprite_list_head.print_node_line();
 	sprite_list_head.clear();
+
+	is_casting();
 
 	/*iGraph.SetColor (0, 255, 255);
 	iGraph.draw_rectangle (
@@ -383,7 +408,8 @@ void cat_path (char* ptr, const char* sub_folder_path, const char* file_name)
 	strcat(ptr,file_name);
 };
 
-void KeyboardInput(int key, int state, int x, int y)
+/*
+void OldKeyboardInput(int key, int state, int x, int y)
 {
 	if (state == KEY_STATE_DOWN)
 	{
@@ -393,7 +419,7 @@ void KeyboardInput(int key, int state, int x, int y)
 			case (KEY_DOWN): Ganondorf.move (Ganondorf.get_current_speed(), vertical); break;
 			case (KEY_LEFT): Ganondorf.move (-Ganondorf.get_current_speed(), horizontal); break;
 			case (KEY_UP): Ganondorf.move (-Ganondorf.get_current_speed(), vertical); break;
-			case (' '): Ganondorf.toggle_dashing(); break;
+			//case (' '): Ganondorf.toggle_dashing(); break;
 			case ('m'): see_generated_map = !see_generated_map; break;
 			case ('v'): exit(0); break;
 
@@ -432,51 +458,144 @@ void KeyboardInput(int key, int state, int x, int y)
 			save_state.tweak_easter_egg (5);
 	};
 };
+*/
+
+
+void KeyboardInput (int key, int state, int x, int y)
+{
+	if (state == KEY_STATE_DOWN)
+	{
+		for (int i=0; i<256; i++)
+			if (key == i)
+				keyboard_key[i] = true;
+	}
+	else if (KEY_STATE_UP)
+	{
+		for (int i=0; i<256; i++)
+			if (key == i)
+				keyboard_key[i] = false;
+	};
+
+	if (keyboard_key[KEY_LEFTSHIFT]) Ganondorf.set_dashing (true);
+	else if (!keyboard_key[KEY_LEFTSHIFT]) Ganondorf.set_dashing (false);
+
+	
+	if (keyboard_key['e']) cast_Dins_Fire();
+	if (keyboard_key['w']) cast_Nayrus_Love();
+	if (keyboard_key['q']) cast_Farores_Wind();
+	
+	if (keyboard_key['m']) see_generated_map = !see_generated_map;
+	if (keyboard_key['v']) exit (0);
+
+	if (keyboard_key['t']) save_state.tweak_temple(0);
+	if (keyboard_key['y']) save_state.tweak_temple(1);
+	if (keyboard_key['u']) save_state.tweak_temple(2);
+	if (keyboard_key['i']) save_state.tweak_temple(3);
+	if (keyboard_key['o']) save_state.tweak_temple(4);
+	if (keyboard_key['p']) save_state.tweak_temple(5);
+
+	if (keyboard_key['f']) save_state.alter_rupees(-100);
+	if (keyboard_key['g']) save_state.alter_rupees(-10);
+	if (keyboard_key['h']) save_state.alter_rupees(-1);
+	if (keyboard_key['j']) save_state.alter_rupees(1);
+	if (keyboard_key['k']) save_state.alter_rupees(10);
+	if (keyboard_key['l']) save_state.alter_rupees(100);
+
+
+	if (keyboard_key['b']) save_state.alter_hearts (-0.25f);
+	if (keyboard_key['n']) save_state.alter_hearts (0.25f);
+			
+	if (keyboard_key[',']) save_state.alter_mp (-5);
+	if (keyboard_key['.']) save_state.alter_mp (5);
+
+	if (keyboard_key['a']) save_state.gain_heart_container (save_state.first_heart_container(0));
+	if (keyboard_key['s']) save_state.lose_heart_container (save_state.first_heart_container(1));
+
+	if (keyboard_key['\t']) keys_visible = !keys_visible;
+
+
+	for (int i='5'; i<='9'; i++)
+		if (keyboard_key[i])	save_state.tweak_easter_egg (key-'5');
+	if (keyboard_key['0'])		save_state.tweak_easter_egg (5);
+};
+
+
+void scan_virtual_keyboard()
+{
+
+	if (keyboard_key[KEY_RIGHT])
+		Ganondorf.move (right);
+	if (keyboard_key[KEY_DOWN])
+		Ganondorf.move (down);
+	if (keyboard_key[KEY_LEFT])
+		Ganondorf.move (left);
+	if (keyboard_key[KEY_UP])
+		Ganondorf.move (up);
+
+
+	//if (keyboard_key[KEY_LEFTSHIFT])
+	//Ganondorf.set_dashing (true);
+	//else if (!keyboard_key[KEY_LEFTSHIFT])
+	//Ganondorf.set_dashing (false);
+};
+
 
 void cast_Dins_Fire()
 {
-	if (save_state.get_mp() >= 40.0f)
-	{
-		save_state.alter_mp (-40.0f);
-		save_state.set_DF (1);
-	};
+	if (! is_casting())
+		if (save_state.get_mp() >= 40.0f)
+		{
+			save_state.alter_mp (-40.0f);
+			save_state.set_DF (1);
+		};
 };
 
 void cast_Nayrus_Love()
 {
-	if (save_state.get_mp() >= 40.0f)
-	{
-		save_state.alter_mp (-40.0f);
-		save_state.set_NL (1200);
-	};
+	if (! is_casting())
+		if (save_state.get_mp() >= 40.0f)
+		{
+			save_state.alter_mp (-40.0f);
+			save_state.set_NL (1200);
+		};
 };
 
 void cast_Farores_Wind()
 {
-	int cost_to_set = 20;
-	int cost_to_warp = 50;
+	if (! is_casting())
+	{
+		int cost_to_set = 20;
+		int cost_to_warp = 50;
 
-	if (FW_x == -1)
-	{
-		if (save_state.get_mp() < cost_to_set)
-			return;
-		FW_x = Ganondorf.get_screen_x();
-		FW_y = Ganondorf.get_screen_y();
-		save_state.alter_mp (-cost_to_set);
-		save_state.set_FW (1);
-	}
-	else
-	{
-		if (save_state.get_mp() < cost_to_warp)
-			return;
-		Ganondorf.set_position (FW_x, FW_y);
-		save_state.alter_mp (-50);
-		FW_x = -1;
-		FW_y = -1;
-		Ganondorf.select_frame (0, 0);
-		save_state.set_FW (0);
+		if (FW_x == -1)
+		{
+			if (save_state.get_mp() < cost_to_set)
+				return;
+			FW_x = Ganondorf.get_screen_x();
+			FW_y = Ganondorf.get_screen_y();
+			save_state.alter_mp (-cost_to_set);
+			save_state.set_FW (1);
+		}
+		else
+		{
+			if (save_state.get_mp() < cost_to_warp)
+				return;
+			Ganondorf.set_position (FW_x, FW_y);
+			save_state.alter_mp (-50);
+			FW_x = -1;
+			FW_y = -1;
+			Ganondorf.select_frame (0, 0);
+			save_state.set_FW (0);
+		};
 	};
 };
+
+bool is_casting()
+{
+	//printf ("%d\n", (save_state.get_FW() || save_state.get_NL() || save_state.get_DF()));
+	return (save_state.get_FW() || save_state.get_NL() || save_state.get_DF());
+};
+
 
 void halt()
 {

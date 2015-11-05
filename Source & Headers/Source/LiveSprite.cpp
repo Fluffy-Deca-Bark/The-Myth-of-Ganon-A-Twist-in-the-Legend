@@ -9,9 +9,22 @@ LiveSprite::LiveSprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, in
 	screen_x = screen_X;
 	screen_y = screen_Y;
 
-	walk_speed = 8;
-	dash_speed = 16;
+	walk_speed = 1;
+	dash_speed = 6;
 	dashing = false;
+};
+
+void LiveSprite::move (direction d)
+{
+	int s = get_current_speed();
+
+	switch (d)
+	{
+		case up: move (0, s); break;
+		case right: move (s, 0); break;
+		case down: move (0, -s); break;
+		case left: move (-s, 0); break;
+	};
 };
 
 void LiveSprite::set_dashing (bool d)

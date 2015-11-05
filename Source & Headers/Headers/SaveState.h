@@ -79,6 +79,8 @@ class SaveState
 		void alter_DF (int n);
 		void alter_NL (int n);
 		void alter_FW (int n);
+
+		int first_heart_container (bool b);
 };
 
 #endif /* defined(__SaveState__) */

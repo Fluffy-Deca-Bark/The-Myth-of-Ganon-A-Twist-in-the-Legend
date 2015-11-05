@@ -22,7 +22,8 @@
 #define TR "Resources\\Sprites\\Terrenos\\"
 
 void cat_path (char* ptr, const char* sub_folder_path, const char* file_name);
-void KeyboardInput(int key, int state, int x, int y);
+//void OldKeyboardInput (int key, int state, int x, int y);
+void KeyboardInput (int key, int state, int x, int y);
 void halt();
 
 #endif /* defined(__Defines__) */

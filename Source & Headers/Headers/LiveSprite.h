@@ -13,6 +13,7 @@ private:
 public:
 	LiveSprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, int screen_Y);
 	void set_dashing (bool dash);
+	void move (direction d);
 	void toggle_dashing();
 	bool is_dashing();
 	int get_current_speed();

@@ -343,12 +343,14 @@ void SaveState::set_hearts (float h)
 
 void SaveState::gain_heart_container (int h)
 {
-	heart_container[h] = true;
+	if (h != -1)
+		heart_container[h] = true;
 };
 
 void SaveState::lose_heart_container (int h)
 {
-	heart_container[h] = false;
+	if (h != -1)
+		heart_container[h] = false;
 };
 
 
@@ -415,6 +417,15 @@ void SaveState::alter_NL (int n)
 void SaveState::alter_FW (int n)
 {
 	casting_Farores_Wind += n;
+};
+
+int SaveState::first_heart_container (bool b)
+{
+	int i;
+	for (i=0; i<17; i++)
+		if (heart_container[i] == b)
+			return i;
+	return -1;
 };
 
 #endif

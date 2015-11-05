@@ -14,6 +14,14 @@ enum axis
 	vertical
 };
 
+enum direction
+{
+	right,
+	down,
+	left,
+	up,
+};
+
 class Sprite : public Image
 {
 	protected:
@@ -55,6 +63,7 @@ class Sprite : public Image
 		void print_pos ();
 		void move (int x, int y);
 		void move (int n, axis a);
+		void move (direction d);
 		char* get_path();
 		char* get_name (char* buffer);
 };

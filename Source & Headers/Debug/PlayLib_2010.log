@@ -1,51 +1,17 @@
-﻿Build started 2015-11-05 3:39:07 AM.
+﻿Build started 2015-11-05 3:06:54 PM.
      1>Project "Z:\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\PlayLib_2010.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "Debug\PlayLib_2010.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Debug\PlayLib_2010.unsuccessfulbuild".
        ClCompile:
-         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"\\Mac\Home\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\Headers" /I"\\Mac\Home\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\etc" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Main.cpp
-         Main.cpp
-     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(177): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(209): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(381): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
-     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(382): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(110) : see declaration of 'strcat'
-     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(383): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(110) : see declaration of 'strcat'
-     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\main.cpp(465): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-       ManifestResourceCompile:
-         All outputs are up-to-date.
-       Link:
-         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Z:\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\Debug\PlayLib_2010.exe" /INCREMENTAL /NOLOGO PlayLib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\PlayLib_2010.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"Z:\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\Debug\PlayLib_2010.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Z:\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\Debug\PlayLib_2010.lib" /MACHINE:X86 Debug\PlayLib_2010.exe.embed.manifest.res
-         Debug\iGraphics.obj
-         Debug\LiveSprite.obj
-         Debug\Main.obj
-         Debug\MapNode.obj
-         Debug\SaveState.obj
-         Debug\Sprite.obj
-         Debug\MapBuilder.obj
-         Debug\SpriteNode.obj
-         PlayLib.lib
-         PlayLibd.lib
-         PlayLib.lib(Graphics.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
-     1>LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
-     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-         Generating code
-         Finished generating code
-     1>PlayLib.lib(Graphics.obj) : warning LNK4204: 'Z:\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>PlayLib.lib(stb_image.obj) : warning LNK4204: 'Z:\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
-       Manifest:
-         C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\PlayLib_2010.exe.embed.manifest" /manifest Debug\PlayLib_2010.exe.intermediate.manifest
-         All outputs are up-to-date.
-       LinkEmbedManifest:
-         All outputs are up-to-date.
-         PlayLib_2010.vcxproj -> Z:\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\Debug\PlayLib_2010.exe
-       FinalizeBuildStatus:
-         Deleting file "Debug\PlayLib_2010.unsuccessfulbuild".
-         Touching "Debug\PlayLib_2010.lastbuildstate".
-     1>Done Building Project "Z:\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\PlayLib_2010.vcxproj" (build target(s)).
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"\\Mac\Home\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\Headers" /I"\\Mac\Home\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\etc" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\LiveSprite.cpp
+         LiveSprite.cpp
+     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\livesprite.cpp(18): error C2723: 'LiveSprite::move' : 'virtual' storage-class specifier illegal on function definition
+     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\livesprite.cpp(23): error C2660: 'LiveSprite::move' : function does not take 2 arguments
+     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\livesprite.cpp(24): error C2660: 'LiveSprite::move' : function does not take 2 arguments
+     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\livesprite.cpp(25): error C2660: 'LiveSprite::move' : function does not take 2 arguments
+     1>z:\projects\the-myth-of-ganon-a-twist-in-the-legend\source & headers\source\livesprite.cpp(26): error C2660: 'LiveSprite::move' : function does not take 2 arguments
+     1>Done Building Project "Z:\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source & Headers\PlayLib_2010.vcxproj" (build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:05.67
+Time Elapsed 00:00:00.51

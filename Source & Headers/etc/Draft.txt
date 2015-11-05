@@ -1,0 +1,37 @@
+if (state == KEY_STATE_DOWN)
+	{
+		switch (key)
+		{
+			
+			case ('m'): see_generated_map = !see_generated_map; break;
+			
+			case ('t'): save_state.tweak_temple(0); break;
+			case ('y'): save_state.tweak_temple(1); break;
+			case ('u'): save_state.tweak_temple(2); break;
+			case ('i'): save_state.tweak_temple(3); break;
+			case ('o'): save_state.tweak_temple(4); break;
+			case ('p'): save_state.tweak_temple(5); break;
+
+			case ('f'): save_state.alter_rupees(-100); break;
+			case ('g'): save_state.alter_rupees(-10); break;
+			case ('h'): save_state.alter_rupees(-1); break;
+			case ('j'): save_state.alter_rupees(1); break;
+			case ('k'): save_state.alter_rupees(10); break;
+			case ('l'): save_state.alter_rupees(100); break;
+
+
+			case ('b'): save_state.alter_hearts (-0.25f); break;
+			case ('n'): save_state.alter_hearts (0.25f); break;
+			
+			case (','): save_state.alter_mp (-5); break;
+			case ('.'): save_state.alter_mp (5); break;
+
+			case ('a'): save_state.gain_heart_container (16); break;
+			case ('s'): save_state.lose_heart_container (16); break;
+		};
+
+		if (key>='5' && key<='9')
+			save_state.tweak_easter_egg (key-'5');
+		if (key=='0')
+			save_state.tweak_easter_egg (5);
+	};
