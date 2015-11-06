@@ -14,15 +14,15 @@ LiveSprite::LiveSprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, in
 	dashing = false;
 };
 
-void LiveSprite::move (direction d)
+void LiveSprite::move_d (direction d)
 {
 	int s = get_current_speed();
 
 	switch (d)
 	{
-		case up: move (0, s); break;
+		case up: move (0, -s); break;
 		case right: move (s, 0); break;
-		case down: move (0, -s); break;
+		case down: move (0, s); break;
 		case left: move (-s, 0); break;
 	};
 };

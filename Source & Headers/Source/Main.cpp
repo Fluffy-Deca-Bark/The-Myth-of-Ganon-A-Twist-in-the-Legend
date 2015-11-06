@@ -11,7 +11,7 @@
 SaveState save_state;
 MapBuilder map_builder;
 iGraphics iGraph;
-Image Ganondorfs_castle;
+Sprite Ganondorfs_castle (736, 448);
 LiveSprite Ganondorf (40, 40, 1, 0, 80, 190);
 
 Sprite portal (337, 270);
@@ -25,6 +25,9 @@ Sprite mp (1,12);
 Sprite keyboard (56, 49);
 Sprite keyboard_sp (168, 49);
 Sprite box (260, 260);
+Sprite door (58, 63);
+Sprite key (144, 297);
+Sprite statue (48, 96);
 
 bool keys_visible = true;
 
@@ -46,6 +49,10 @@ int FW_stretch = 0;
 int warping_animation = 0;
 bool Ganondorf_visible = true;
 bool keyboard_key[256];
+int current_map = 0;
+int keys_held = 0;
+
+
 
 
 SpriteNode sprite_list_head;
@@ -54,15 +61,21 @@ bool see_generated_map = false;
 
 void load_images()
 {
-	char Ganondorfs_castle_path[FILE_PATH_SIZE];
-	//cat_path (Ganondorfs_castle_path, "Level Design\\Casa do Ganondorf\\", "Casa do Ganondorf.png");
-	cat_path (Ganondorfs_castle_path, CO, "Castle with organ and statues.png");
-	Ganondorfs_castle.LoadPNGImage (Ganondorfs_castle_path);
+//	char Ganondorfs_castle_path[FILE_PATH_SIZE];
+//	//cat_path (Ganondorfs_castle_path, "Level Design\\Casa do Ganondorf\\", "Casa do Ganondorf.png");
+//	cat_path (Ganondorfs_castle_path, CO, "Castle with organ and statues.png");
+//	Ganondorfs_castle.LoadPNGImage (Ganondorfs_castle_path);
+//
 
+	Ganondorfs_castle.load (TR, "Ganondorf's Castle.png");
+	Ganondorfs_castle.set_position (0, 0);
+	Ganondorfs_castle.select_frame (0, 0);
+	sprite_list_head.insert_node (&Ganondorfs_castle, 0);
+	
 
 	Ganondorf.load	(CO, "Ganondorf.png");
 	Ganondorf.select_frame (0, 2);
-	Ganondorf.set_position ((SCREEN_WIDTH - Ganondorf.get_frame_w()) / 2 - 8, 345);
+	Ganondorf.set_position (SCREEN_WIDTH/2 - Ganondorf.get_width()/2, 345);
 	portal.load		(CO, "Portal.png");
 	medallion.load	(CO, "Medallion.png");
 	easter_egg.load (CO, "Easter Egg.png");
@@ -79,7 +92,9 @@ void load_images()
 	keyboard.load	(CO, "Keys with spells.png");
 	keyboard_sp.load(CO, "Keys with spells.png");
 	box.load		(CO, "White Square.png");
-
+	statue.load		(CO, "Statue.png");
+	door.load		(CO, "Door.png");
+	key.load		(CO, "Key.png");
 
 	Epona.load		(CO, "Epona.png");
 	Epona.select_frame (1, 0);
@@ -90,7 +105,8 @@ void main_loop()
 {
 	scan_virtual_keyboard();
 
-	iGraph.DrawImage2D (0,0,736,448,0,0,736,448,Ganondorfs_castle);
+	if (current_map == 0)
+		iGraph.DrawImage2D (0,0,736,448,0,0,736,448,Ganondorfs_castle);
 	//Ganondorf.draw (&iGraph);
 	//Ganondorf.print_pos();
 	if (Ganondorf_visible)
@@ -153,6 +169,14 @@ void main_loop()
 		sprite_list_head.insert_node (&easter_egg, 5);
 	};
 
+	int statue_padding = 50;
+	int statue_y = 350;
+	statue.select_frame (0, 0);
+	statue.set_position (SCREEN_WIDTH/2 - statue.get_width()/2 - statue_padding, statue_y);
+	sprite_list_head.insert_node (&statue, 5);
+	statue.set_position (SCREEN_WIDTH/2 - statue.get_width()/2 + statue_padding, statue_y);
+	sprite_list_head.insert_node (&statue, 5);
+	
 
 
 
@@ -226,6 +250,18 @@ void main_loop()
 	iGraph.SetColor (255,255,255);
 	iGraph.SetTextFont ("Helvetica", 25, 10, 0, 0);
 	iGraph.draw_text (45, SCREEN_HEIGHT - 13, rupee_str);
+
+
+	char keys_held_text[2];
+	keys_held_text[0] = keys_held+'0';
+	keys_held_text[1] = '\0';
+	key.select_frame (1, 0);
+	key.set_modifiers (16, 32);
+	key.set_position (SCREEN_WIDTH - 40 - key.get_width(), SCREEN_HEIGHT - 10);
+	sprite_list_head.insert_node (&key, 10);
+	iGraph.SetColor (255,255,255);
+	iGraph.SetTextFont ("Helvetica", 25, 10, 0, 0);
+	iGraph.draw_text (SCREEN_WIDTH - 34, SCREEN_HEIGHT - 13, keys_held_text);
 
 
 
@@ -360,6 +396,12 @@ void main_loop()
 		sprite_list_head.insert_node (&keyboard_sp, 10);*/
 	};
 
+
+
+
+	door.select_frame (0, 0);
+	door.set_position (SCREEN_WIDTH/2 - door.get_width()/2, 128);
+	sprite_list_head.insert_node (&door, 1);
 
 
 
@@ -524,13 +566,13 @@ void scan_virtual_keyboard()
 {
 
 	if (keyboard_key[KEY_RIGHT])
-		Ganondorf.move (right);
+		Ganondorf.move_d (right);
 	if (keyboard_key[KEY_DOWN])
-		Ganondorf.move (down);
+		Ganondorf.move_d (down);
 	if (keyboard_key[KEY_LEFT])
-		Ganondorf.move (left);
+		Ganondorf.move_d (left);
 	if (keyboard_key[KEY_UP])
-		Ganondorf.move (up);
+		Ganondorf.move_d (up);
 
 
 	//if (keyboard_key[KEY_LEFTSHIFT])

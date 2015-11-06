@@ -63,7 +63,7 @@ class Sprite : public Image
 		void print_pos ();
 		void move (int x, int y);
 		void move (int n, axis a);
-		void move (direction d);
+		void move_d (direction d);
 		char* get_path();
 		char* get_name (char* buffer);
 };
