@@ -7,6 +7,11 @@ SpriteNode::SpriteNode()
 	layer = -1;
 	w_mod = 0;
 	h_mod = 0;
+
+	stop_box_x1 = -1;
+	stop_box_y1 = -1;
+	stop_box_x2 = -1;
+	stop_box_y2 = -1;
 };
 
 SpriteNode::SpriteNode (Sprite* s, int l, SpriteNode* p)
@@ -28,6 +33,11 @@ SpriteNode::SpriteNode (Sprite* s, int l, SpriteNode* p)
 	ptr = p;
 	w_mod = s->get_width();
 	h_mod = s->get_height();
+
+	stop_box_x1 = s->get_stop_box_x1();
+	stop_box_y1 = s->get_stop_box_y1();
+	stop_box_x2 = s->get_stop_box_x2();
+	stop_box_y2 = s->get_stop_box_y2();
 };
 
 int SpriteNode::get_sheet_x()
@@ -232,4 +242,94 @@ void SpriteNode::print_node_line()
 		ptr->print_node_line();
 	else
 		printf ("[tail]\n\n");
+};
+
+
+int SpriteNode::get_width()
+{
+	if (w_mod == 0)
+		return frame_w;
+
+	return w_mod;
+};
+
+int SpriteNode::get_height()
+{
+	if (h_mod == 0)
+		return frame_h;
+
+	return h_mod;
+};
+
+
+int SpriteNode::get_stop_box_x1()
+{
+	return stop_box_x1;
+};
+
+int SpriteNode::get_stop_box_y1()
+{
+	return stop_box_y1;
+};
+
+int SpriteNode::get_stop_box_x2()
+{
+	return stop_box_x2;
+};
+
+int SpriteNode::get_stop_box_y2()
+{
+	return stop_box_y2;
+};
+
+void SpriteNode::set_stop_box (int x1, int y1, int x2, int y2)
+{
+	stop_box_x1 = x1;
+	stop_box_y1 = y1;
+	stop_box_x2 = x2;
+	stop_box_y2 = y2;
+};
+
+bool SpriteNode::stop_box_is_set()
+{
+	if (stop_box_x1 == -1 || stop_box_y1 == -1 || stop_box_x2 == -1 || stop_box_y2 == -1)
+		return false;
+	return true;
+};
+
+bool SpriteNode::check_stop_box_collision (direction d, int n1, int n2)
+{
+	int gx1 = get_screen_x() + get_stop_box_x1();
+	int gy1 = get_screen_y() - get_stop_box_y1() + 2;
+	int gx2 = get_screen_x() + get_stop_box_x2() - 1;
+	int gy2 = get_screen_y() - get_stop_box_y2() + 1;
+	
+	int gx_r = max (gx1, gx2);
+	int gx_l = min (gx1, gx2);
+	int gy_d = max (gy1, gy2);
+	int gy_u = min (gy1, gy2);
+
+	int n_min = min (n1, n2);
+	int n_max = max (n1, n2);
+
+	switch (d)
+	{
+		case left: case right:
+			if (between (n_min, gy_u, n_max) ||
+				between (gy_u, n_min, gy_d) ||
+				between (n_min, gy_d, n_max) ||
+				between (gy_u, n_max, gy_d))
+				return true;
+			break;
+
+		case up: case down:
+			if (between (n_min, gx_l, n_max) ||
+				between (gx_l, n_min, gx_r) ||
+				between (n_min, gx_r, n_max) ||
+				between (gx_l, n_max, gx_r))
+				return true;
+			break;
+
+		default: return false;
+	};
 };

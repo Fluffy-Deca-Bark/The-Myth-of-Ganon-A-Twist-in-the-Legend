@@ -29,7 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="etc\bass.dll" />
-    <None Include="etc\Draft.txt" />
+    <None Include="Files\Draft.txt" />
     <None Include="freeglut.dll" />
     <None Include="etc\glu32.dll" />
     <None Include="Files\MapFileBG.txt" />

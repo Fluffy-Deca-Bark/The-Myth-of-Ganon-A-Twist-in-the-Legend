@@ -1,5 +1,3 @@
-// 1.1
-
 #ifndef __Defines__
 #define __Defines__
 
@@ -8,8 +6,8 @@
 
 #define PROJECT_PATH "\\\\Mac\\Home\\Projects\\The-Myth-of-Ganon-A-Twist-in-the-Legend\\"
 
-#define SCREEN_WIDTH (736)
-#define SCREEN_HEIGHT (448)
+#define SCREEN_WIDTH (0 ? 1920 : 736)	//736
+#define SCREEN_HEIGHT (0 ? 1080 : 448)	//448
 
 #define TILE_SIZE (16)
 #define MAX_RUPEES (999)
@@ -24,6 +22,10 @@
 void cat_path (char* ptr, const char* sub_folder_path, const char* file_name);
 //void OldKeyboardInput (int key, int state, int x, int y);
 void KeyboardInput (int key, int state, int x, int y);
+bool between (int a, int b, int c);
+bool between_ordered (int a, int b, int c);
+int max (int a, int b);
+int min (int a, int b);
 void halt();
 
 #endif /* defined(__Defines__) */

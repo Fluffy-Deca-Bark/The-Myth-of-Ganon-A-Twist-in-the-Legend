@@ -30,6 +30,8 @@ Sprite key (144, 297);
 Sprite statue (48, 96);
 
 bool keys_visible = true;
+bool bounding_box_visible = false;
+bool stop_box_visible = true;
 
 Sprite spell (260, 260);
 
@@ -38,6 +40,7 @@ Sprite nayrus_love (260, 260);
 Sprite farores_wind (260, 260);
 Sprite f_wind_warpball (260, 260);
 Sprite warp (260, 260);
+
 void scan_virtual_keyboard();
 void cast_Dins_Fire();
 void cast_Nayrus_Love();
@@ -51,8 +54,11 @@ bool Ganondorf_visible = true;
 bool keyboard_key[256];
 int current_map = 0;
 int keys_held = 0;
+void display_bounding_boxes();
+void display_stop_boxes();
+void check_stop_boxes();
 
-
+bool Ganondorf_allowed_to_move[4] = { true, true, true, true };
 
 
 SpriteNode sprite_list_head;
@@ -92,9 +98,11 @@ void load_images()
 	keyboard.load	(CO, "Keys with spells.png");
 	keyboard_sp.load(CO, "Keys with spells.png");
 	box.load		(CO, "White Square.png");
-	statue.load		(CO, "Statue.png");
 	door.load		(CO, "Door.png");
 	key.load		(CO, "Key.png");
+
+	statue.load		(CO, "Statue.png");
+	statue.set_stop_box (6, 32, 40, 5);
 
 	Epona.load		(CO, "Epona.png");
 	Epona.select_frame (1, 0);
@@ -103,14 +111,15 @@ void load_images()
 
 void main_loop()
 {
-	scan_virtual_keyboard();
-
 	if (current_map == 0)
 		iGraph.DrawImage2D (0,0,736,448,0,0,736,448,Ganondorfs_castle);
 	//Ganondorf.draw (&iGraph);
 	//Ganondorf.print_pos();
 	if (Ganondorf_visible)
+	{
+		Ganondorf.set_stop_box (10, 3, 30, 13);
 		sprite_list_head.insert_node (&Ganondorf, 5);
+	};
 
 	int portal_y = 280;
 
@@ -404,13 +413,16 @@ void main_loop()
 	sprite_list_head.insert_node (&door, 1);
 
 
+	
 
 
 	sprite_list_head.draw_list (&iGraph);
 	//sprite_list_head.print_node_line();
+	display_bounding_boxes();
+	display_stop_boxes();
+	check_stop_boxes();
+	scan_virtual_keyboard();
 	sprite_list_head.clear();
-
-	is_casting();
 
 	/*iGraph.SetColor (0, 255, 255);
 	iGraph.draw_rectangle (
@@ -518,8 +530,21 @@ void KeyboardInput (int key, int state, int x, int y)
 				keyboard_key[i] = false;
 	};
 
-	if (keyboard_key[KEY_LEFTSHIFT]) Ganondorf.set_dashing (true);
-	else if (!keyboard_key[KEY_LEFTSHIFT]) Ganondorf.set_dashing (false);
+	/*if (keyboard_key[KEY_LEFTSHIFT])
+		Ganondorf.set_dashing (true);
+	else if (!keyboard_key[KEY_LEFTSHIFT])
+		Ganondorf.set_dashing (false);*/
+
+	
+	if (keyboard_key[KEY_RIGHT])
+		Ganondorf.move_d (right);
+	if (keyboard_key[KEY_DOWN])
+		Ganondorf.move_d (down);
+	if (keyboard_key[KEY_LEFT])
+		Ganondorf.move_d (left);
+	if (keyboard_key[KEY_UP])
+		Ganondorf.move_d (up);
+
 
 	
 	if (keyboard_key['e']) cast_Dins_Fire();
@@ -543,18 +568,22 @@ void KeyboardInput (int key, int state, int x, int y)
 	if (keyboard_key['k']) save_state.alter_rupees(10);
 	if (keyboard_key['l']) save_state.alter_rupees(100);
 
-
 	if (keyboard_key['b']) save_state.alter_hearts (-0.25f);
 	if (keyboard_key['n']) save_state.alter_hearts (0.25f);
 			
 	if (keyboard_key[',']) save_state.alter_mp (-5);
 	if (keyboard_key['.']) save_state.alter_mp (5);
 
-	if (keyboard_key['a']) save_state.gain_heart_container (save_state.first_heart_container(0));
-	if (keyboard_key['s']) save_state.lose_heart_container (save_state.first_heart_container(1));
+	if (keyboard_key['s']) save_state.gain_heart_container (save_state.first_heart_container(0));
+	if (keyboard_key['a']) save_state.lose_heart_container (save_state.first_heart_container(1));
 
 	if (keyboard_key['\t']) keys_visible = !keys_visible;
 
+	if (keyboard_key['z']) bounding_box_visible = !bounding_box_visible;
+	if (keyboard_key['x']) stop_box_visible = !stop_box_visible;
+
+	if (keyboard_key['['] && keys_held > 0) keys_held--;
+	if (keyboard_key[']'] && keys_held < 9) keys_held++;
 
 	for (int i='5'; i<='9'; i++)
 		if (keyboard_key[i])	save_state.tweak_easter_egg (key-'5');
@@ -564,15 +593,19 @@ void KeyboardInput (int key, int state, int x, int y)
 
 void scan_virtual_keyboard()
 {
+	if (keyboard_key[KEY_LEFTSHIFT])
+		Ganondorf.set_dashing (true);
+	else
+		Ganondorf.set_dashing (false);
 
-	if (keyboard_key[KEY_RIGHT])
+	/*if (keyboard_key[KEY_RIGHT])
 		Ganondorf.move_d (right);
 	if (keyboard_key[KEY_DOWN])
 		Ganondorf.move_d (down);
 	if (keyboard_key[KEY_LEFT])
 		Ganondorf.move_d (left);
 	if (keyboard_key[KEY_UP])
-		Ganondorf.move_d (up);
+		Ganondorf.move_d (up);*/
 
 
 	//if (keyboard_key[KEY_LEFTSHIFT])
@@ -638,6 +671,153 @@ bool is_casting()
 	return (save_state.get_FW() || save_state.get_NL() || save_state.get_DF());
 };
 
+void display_bounding_boxes()
+{
+	if (bounding_box_visible)
+	{
+		iGraph.SetColor (255, 255, 255);
+		for (SpriteNode* p = sprite_list_head.get_ptr(); p != NULL; p = p->get_ptr())
+		{
+			iGraph.draw_rectangle 
+			(
+				p->get_screen_x() + 1,
+				p->get_screen_y(),
+				p->get_screen_x() + p->get_width(),
+				p->get_screen_y() - p->get_height()
+			);
+		};
+	};
+};
+
+void display_stop_boxes()
+{
+	if (stop_box_visible)
+	{
+		for (SpriteNode* p = sprite_list_head.get_ptr(); p != NULL; p = p->get_ptr())
+		{
+			if (p->stop_box_is_set())
+			{
+				if (p->get_sprite() != &Ganondorf)
+					iGraph.SetColor (255, 0, 0);
+				else
+					iGraph.SetColor (255, 127, 0);
+
+				iGraph.draw_rectangle
+				(
+					p->get_screen_x() + p->get_stop_box_x1(),
+					p->get_screen_y() - p->get_stop_box_y1(),
+					p->get_screen_x() + p->get_stop_box_x2(),
+					p->get_screen_y() - p->get_stop_box_y2()
+				);
+			}
+		};
+	};
+};
+
+void check_stop_boxes()
+{
+	for (int i=0; i<4; i++)
+		Ganondorf.set_move_restriction ((direction) i, -1);
+		//Ganondorf.set_allowed_to_move ((direction) i, true);
+
+
+	SpriteNode* g;
+	for (g = sprite_list_head.get_ptr(); g->get_sprite() != &Ganondorf; g = g->get_ptr());
+	
+	int gx1 = g->get_screen_x() + g->get_stop_box_x1();
+	int gy1 = g->get_screen_y() - g->get_stop_box_y1();
+	int gx2 = g->get_screen_x() + g->get_stop_box_x2();
+	int gy2 = g->get_screen_y() - g->get_stop_box_y2();
+	int dist = Ganondorf.get_current_speed(); //?
+
+	int px1;
+	int py1;
+	int px2;
+	int py2;
+
+	int gx_r = max (gx1, gx2) - 1;
+	int gx_l = min (gx1, gx2) - 1;
+	int gy_d = max (gy1, gy2) + 1;
+	int gy_u = min (gy1, gy2) + 1;
+
+	for (SpriteNode* p = sprite_list_head.get_ptr(); p != NULL; p = p->get_ptr())
+	{
+		if (p->stop_box_is_set() && p->get_sprite() != &Ganondorf)
+		{
+			px1 = p->get_screen_x() + p->get_stop_box_x1();
+			py1 = p->get_screen_y() - p->get_stop_box_y1();
+			px2 = p->get_screen_x() + p->get_stop_box_x2();
+			py2 = p->get_screen_y() - p->get_stop_box_y2();
+
+			int px_r = max (px1, px2) - 1;
+			int px_l = min (px1, px2) - 1;
+			int py_d = max (py1, py2) + 1;
+			int py_u = min (py1, py2) + 1;
+
+			
+			if (stop_box_visible)
+			{
+				iGraph.SetColor (120, 255, 0);
+				iGraph.draw_point (gx_l, gy_d);
+
+				iGraph.SetColor (0, 255, 255);
+				iGraph.draw_point (gx_r, gy_u);
+
+				iGraph.SetColor (120, 255, 0);
+				iGraph.draw_point (px_l, py_d);
+
+				iGraph.SetColor (0, 255, 255);
+				iGraph.draw_point (px_r, py_u);
+			};
+
+			if (g->check_stop_box_collision(left, py_u, py_d) && between (0, gx_l-px_r, dist))
+			{
+				//Ganondorf.set_allowed_to_move (left, false);
+				Ganondorf.set_move_restriction (left, gx_l - px_r);
+			};
+
+			if (g->check_stop_box_collision(up, px_l, px_r) && between (-1, gy_u-py_d, dist))
+			{
+				//Ganondorf.set_allowed_to_move (up, false);
+				Ganondorf.set_move_restriction (up, gy_u - py_d);
+			};
+
+			if (g->check_stop_box_collision(right, py_u, py_d) && between (-1, px_l-gx_r, dist))
+			{
+				//Ganondorf.set_allowed_to_move (right, false);
+				Ganondorf.set_move_restriction (right, px_l - gx_r);
+			};
+
+			if (g->check_stop_box_collision(down, px_l, px_r) && between (-1, py_u-gy_d, dist))
+			{
+				//Ganondorf.set_allowed_to_move (down, false);
+				Ganondorf.set_move_restriction (down, py_u - gy_d);
+			};
+		};
+	};
+};
+
+
+
+bool between (int a, int b, int c)
+{
+	return ((a <= b && b <= c) || (c <= b && b <= a));
+};
+
+bool between_ordered (int a, int b, int c)
+{
+	return (a <= b && b <= c);
+};
+
+int max (int a, int b)
+{
+	return (a >= b ? a : b);
+};
+
+int min (int a, int b)
+{
+	return (a <= b ? a : b);
+};
 
 void halt()
 {

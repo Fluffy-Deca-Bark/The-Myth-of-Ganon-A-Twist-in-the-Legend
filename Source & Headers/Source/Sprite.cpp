@@ -2,7 +2,10 @@
 
 Sprite::Sprite()
 {
-
+	stop_box_x1 = -1;
+	stop_box_y1 = -1;
+	stop_box_x2 = -1;
+	stop_box_y2 = -1;
 };
 
 Sprite::Sprite (int w, int h)
@@ -11,6 +14,11 @@ Sprite::Sprite (int w, int h)
 	frame_h = h;
 	w_mod = 0;
 	h_mod = 0;
+
+	stop_box_x1 = -1;
+	stop_box_y1 = -1;
+	stop_box_x2 = -1;
+	stop_box_y2 = -1;
 };
 
 Sprite::Sprite (int w, int h, const char* p)
@@ -24,6 +32,11 @@ Sprite::Sprite (int w, int h, const char* p)
 
 	w_mod = 0;
 	h_mod = 0;
+	
+	stop_box_x1 = -1;
+	stop_box_y1 = -1;
+	stop_box_x2 = -1;
+	stop_box_y2 = -1;
 };
 
 Sprite::Sprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, int screen_Y)
@@ -36,6 +49,11 @@ Sprite::Sprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, int screen
 	screen_y = screen_Y;
 	w_mod = 0;
 	h_mod = 0;
+	
+	stop_box_x1 = -1;
+	stop_box_y1 = -1;
+	stop_box_x2 = -1;
+	stop_box_y2 = -1;
 };
 
 void Sprite::set_frame_w (int w)
@@ -102,6 +120,41 @@ int Sprite::get_height()
 		return frame_h;
 
 	return h_mod;
+};
+
+int Sprite::get_stop_box_x1()
+{
+	return stop_box_x1;
+};
+
+int Sprite::get_stop_box_y1()
+{
+	return stop_box_y1;
+};
+
+int Sprite::get_stop_box_x2()
+{
+	return stop_box_x2;
+};
+
+int Sprite::get_stop_box_y2()
+{
+	return stop_box_y2;
+};
+
+void Sprite::set_stop_box (int x1, int y1, int x2, int y2)
+{
+	stop_box_x1 = x1;
+	stop_box_y1 = y1;
+	stop_box_x2 = x2;
+	stop_box_y2 = y2;
+};
+
+bool Sprite::stop_box_is_set()
+{
+	if (stop_box_x1 == -1 || stop_box_y2 == -1 || stop_box_x2 == -1 || stop_box_y2 == -1)
+		return false;
+	return true;
 };
 
 void Sprite::select_frame (int x, int y)
@@ -257,7 +310,6 @@ void Sprite::move (int n, axis a)
 {
 	a == horizontal ? move(n,0) : move(0,n);
 };
-
 
 char* Sprite::get_path()
 {

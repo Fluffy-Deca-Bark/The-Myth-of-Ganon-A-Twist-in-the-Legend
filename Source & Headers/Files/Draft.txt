@@ -1,0 +1,4 @@
+Ganondorf.get_screen_x() + 6,
+Ganondorf.get_screen_y() - 1,
+Ganondorf.get_screen_x() + Ganondorf.get_width() - 6,
+Ganondorf.get_screen_y() - 14

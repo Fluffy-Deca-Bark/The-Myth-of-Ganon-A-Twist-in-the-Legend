@@ -80,7 +80,7 @@
     <None Include="freeglut.dll">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="etc\Draft.txt" />
+    <None Include="Files\Draft.txt" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="PlayLibd.lib">

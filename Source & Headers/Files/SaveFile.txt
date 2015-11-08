@@ -16,3 +16,7 @@
 111
 - Easter eggs -
 000000
+
+
+SpriteNode:LiveSprite
+Sprite::stop_bounding_box

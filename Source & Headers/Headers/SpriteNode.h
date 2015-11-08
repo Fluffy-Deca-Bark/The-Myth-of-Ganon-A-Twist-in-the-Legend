@@ -15,6 +15,11 @@ class SpriteNode
 		int w_mod;
 		int h_mod;
 		int layer;
+		int stop_box_x1;
+		int stop_box_y1;
+		int stop_box_x2;
+		int stop_box_y2;
+
 
 		SpriteNode* ptr;
 		Sprite* sprite;
@@ -33,6 +38,13 @@ class SpriteNode
 		int get_frame_w();
 		int get_frame_h();
 		int get_layer();
+
+		int get_stop_box_x1();
+		int get_stop_box_y1();
+		int get_stop_box_x2();
+		int get_stop_box_y2();
+		bool stop_box_is_set();
+		void set_stop_box (int x1, int y1, int x2, int y2);
 
 		SpriteNode* get_ptr();
 		Sprite* get_sprite();
@@ -53,6 +65,12 @@ class SpriteNode
 		void print_node();
 		void print_sprite_file_name();
 		void print_node_line();
+
+		int get_width();
+		int get_height();
+
+
+		bool check_stop_box_collision (direction d, int n1, int n2);
 };
 
 
