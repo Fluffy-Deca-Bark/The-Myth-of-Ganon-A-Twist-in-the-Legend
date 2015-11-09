@@ -6,6 +6,7 @@
 #include "iGraphics.h"
 #include "MapBuilder.h"
 #include "SpriteNode.h"
+#include "Door.h"
 #include <math.h>
 
 SaveState save_state;
@@ -25,7 +26,7 @@ Sprite mp (1,12);
 Sprite keyboard (56, 49);
 Sprite keyboard_sp (168, 49);
 Sprite box (260, 260);
-Sprite door (58, 63);
+//Sprite door (58, 63);
 Sprite key (144, 297);
 Sprite statue (48, 96);
 
@@ -40,6 +41,8 @@ Sprite nayrus_love (260, 260);
 Sprite farores_wind (260, 260);
 Sprite f_wind_warpball (260, 260);
 Sprite warp (260, 260);
+
+Door door (58, 63, 0, 0, up, locked);
 
 void scan_virtual_keyboard();
 void cast_Dins_Fire();
@@ -57,7 +60,7 @@ int keys_held = 0;
 void display_bounding_boxes();
 void display_stop_boxes();
 void check_stop_boxes();
-
+void check_locked_doors();
 bool Ganondorf_allowed_to_move[4] = { true, true, true, true };
 
 
@@ -107,6 +110,8 @@ void load_images()
 	Epona.load		(CO, "Epona.png");
 	Epona.select_frame (1, 0);
 	Epona.set_position (360, 230);
+
+	door.load (CO, "Door.png");
 };
 
 void main_loop()
@@ -407,11 +412,21 @@ void main_loop()
 
 
 
-
-	door.select_frame (0, 0);
+	SpriteNode* door_ptr = NULL;
+	door.set_state (open);
+	door.update_stop_box();
 	door.set_position (SCREEN_WIDTH/2 - door.get_width()/2, 128);
-	sprite_list_head.insert_node (&door, 1);
+	door.set_direction (up);
+	door.check_lock (0, 0, 0, 0, &keys_held, keys_visible, &iGraph);
+	door_ptr = sprite_list_head.insert_node (&door, 1);
+	door_ptr -> set_door_direction (door.get_direction());
+	
 
+	/*door.set_direction (left);
+	door.set_position (40, 300);
+	door.check_lock (0, 0, 0, 0, &keys_held, keys_visible, &iGraph);
+	door_ptr = sprite_list_head.insert_node (&door, 1);
+	door_ptr -> set_door_direction (door.get_direction());*/
 
 	
 
@@ -439,7 +454,9 @@ int main (void)
 	
 	if(1)
 	{
-		iGraph.CreateMainWindow (SCREEN_WIDTH, SCREEN_HEIGHT, "The Myth of Ganon: A Twist in the Legend");
+		iGraph.CreateMainWindow (SCREEN_WIDTH, SCREEN_HEIGHT,
+			"The Myth of Ganon: A Twist in the Legend");
+
 		iGraph.SetKeyboardInput(KeyboardInput);
 		iGraph.SetBackgroundColor (26,32,40);
 		load_images();
@@ -700,7 +717,7 @@ void display_stop_boxes()
 				if (p->get_sprite() != &Ganondorf)
 					iGraph.SetColor (255, 0, 0);
 				else
-					iGraph.SetColor (255, 127, 0);
+					iGraph.SetColor (255, 200, 0);
 
 				iGraph.draw_rectangle
 				(
@@ -709,7 +726,7 @@ void display_stop_boxes()
 					p->get_screen_x() + p->get_stop_box_x2(),
 					p->get_screen_y() - p->get_stop_box_y2()
 				);
-			}
+			};
 		};
 	};
 };
@@ -793,6 +810,9 @@ void check_stop_boxes()
 				//Ganondorf.set_allowed_to_move (down, false);
 				Ganondorf.set_move_restriction (down, py_u - gy_d);
 			};
+
+
+			p->get_sprite()->check_lock (0, 0, 0, 0, &keys_held, stop_box_visible, &iGraph);
 		};
 	};
 };

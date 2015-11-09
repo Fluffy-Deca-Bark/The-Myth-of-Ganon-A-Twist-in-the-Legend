@@ -57,7 +57,7 @@
     <ClInclude Include="Headers\SpriteNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\DoorWithKey.h">
+    <ClInclude Include="Headers\Door.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -115,7 +115,7 @@
     <ClCompile Include="Source\SpriteNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\DoorWithKey.cpp">
+    <ClCompile Include="Source\Door.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

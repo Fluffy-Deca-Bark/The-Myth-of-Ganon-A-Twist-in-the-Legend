@@ -19,7 +19,11 @@ class SpriteNode
 		int stop_box_y1;
 		int stop_box_x2;
 		int stop_box_y2;
-
+		int interact_x1;
+		int interact_y1;
+		int interact_x2;
+		int interact_y2;
+		int door_direction;
 
 		SpriteNode* ptr;
 		Sprite* sprite;
@@ -57,7 +61,7 @@ class SpriteNode
 		void set_ptr (SpriteNode* p);
 		void set_sprite (Sprite* s);
 
-		void insert_node (Sprite* s, int l);
+		SpriteNode* insert_node (Sprite* s, int l);
 		void clear();
 		void draw_list (iGraphics* i);
 		void draw (iGraphics* i);
@@ -69,6 +73,8 @@ class SpriteNode
 		int get_width();
 		int get_height();
 
+		void set_door_direction (int d);
+		int get_door_direction();
 
 		bool check_stop_box_collision (direction d, int n1, int n2);
 };

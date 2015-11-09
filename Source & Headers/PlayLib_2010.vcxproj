@@ -18,7 +18,7 @@
     <ClInclude Include="etc\freeglut_std.h" />
     <ClInclude Include="etc\glut.h" />
     <ClInclude Include="etc\Graphics.h" />
-    <ClInclude Include="Headers\DoorWithKey.h" />
+    <ClInclude Include="Headers\Door.h" />
     <ClInclude Include="Headers\iGraphics.h" />
     <ClInclude Include="Headers\LiveSprite.h" />
     <ClInclude Include="Headers\MapNode.h" />
@@ -41,7 +41,7 @@
     <Library Include="PlayLibd.lib" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\DoorWithKey.cpp" />
+    <ClCompile Include="Source\Door.cpp" />
     <ClCompile Include="Source\iGraphics.cpp" />
     <ClCompile Include="Source\LiveSprite.cpp" />
     <ClCompile Include="Source\Main.cpp" />

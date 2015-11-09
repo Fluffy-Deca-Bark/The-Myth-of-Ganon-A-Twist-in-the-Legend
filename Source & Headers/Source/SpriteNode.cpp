@@ -12,6 +12,11 @@ SpriteNode::SpriteNode()
 	stop_box_y1 = -1;
 	stop_box_x2 = -1;
 	stop_box_y2 = -1;
+
+	interact_x1 = -1;
+	interact_y1 = -1;
+	interact_x2 = -1;
+	interact_y2 = -1;
 };
 
 SpriteNode::SpriteNode (Sprite* s, int l, SpriteNode* p)
@@ -129,7 +134,7 @@ void SpriteNode::set_sprite (Sprite* s)
 	sprite = s;
 };
 
-void SpriteNode::insert_node (Sprite* s, int l)
+SpriteNode* SpriteNode::insert_node (Sprite* s, int l)
 {
 	int s_y = s->get_screen_y() - s->get_frame_h()/2;
 	int y = screen_y - frame_h/2;
@@ -137,7 +142,7 @@ void SpriteNode::insert_node (Sprite* s, int l)
 	if (s == NULL)
 	{
 		printf ("Tried to insert a null sprite pointer to the list.\n");
-		return;
+		return NULL;
 	};
 
 	if ((l > layer) || (l == layer) && (s_y >= y))
@@ -145,6 +150,7 @@ void SpriteNode::insert_node (Sprite* s, int l)
 		if (ptr == NULL)
 		{
 			ptr = new SpriteNode (s, l, NULL);
+			return ptr;
 		}
 		else
 		{
@@ -153,17 +159,20 @@ void SpriteNode::insert_node (Sprite* s, int l)
 			if ((l > ptr->get_layer()) || (l == ptr->get_layer()) && (s_y >= p_y))
 			{
 				ptr->insert_node (s, l);
+				return ptr;
 			}
 			else
 			{
 				SpriteNode* temp = ptr;
 				ptr = new SpriteNode (s, l, temp);
+				return ptr;
 			};
 		};
 	}
 	else
 	{
 		printf ("Tried to insert a sprite to the list in the wrong order.\n");
+		return NULL;
 	};
 };
 
@@ -332,4 +341,14 @@ bool SpriteNode::check_stop_box_collision (direction d, int n1, int n2)
 
 		default: return false;
 	};
+};
+
+void SpriteNode::set_door_direction (int d)
+{
+	door_direction = d;
+};
+
+int SpriteNode::get_door_direction()
+{
+	return door_direction;
 };

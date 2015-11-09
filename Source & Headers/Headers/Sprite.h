@@ -37,6 +37,10 @@ class Sprite : public Image
 		int stop_box_y1;
 		int stop_box_x2;
 		int stop_box_y2;
+		int interact_x1;
+		int interact_y1;
+		int interact_x2;
+		int interact_y2;
 		char path[FILE_PATH_SIZE];
 
 	public:
@@ -76,6 +80,9 @@ class Sprite : public Image
 		void move_d (direction d);
 		char* get_path();
 		char* get_name (char* buffer);
+
+
+		virtual void check_lock (int x1, int y1, int x2, int y2, int* k, bool v, iGraphics* iGraph) { };
 };
 
 #endif

@@ -32,7 +32,7 @@ void LiveSprite::move_d (direction d)
 			{
 				move (0, -move_restriction[up]);
 				select_frame (0, 2);
-				move_restriction[up] == 0;
+				move_restriction[up] = 0;
 			};
 				break;
 
@@ -107,3 +107,7 @@ void LiveSprite::set_move_restriction (direction d, int r)
 	move_restriction[d] = r;
 };
 
+void LiveSprite::check_lock (int x, int y, int* k)
+{
+
+};

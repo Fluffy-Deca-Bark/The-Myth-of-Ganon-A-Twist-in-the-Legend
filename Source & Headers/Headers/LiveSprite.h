@@ -21,6 +21,7 @@ public:
 	int get_current_speed();
 	//void set_allowed_to_move (direction d, bool b);
 	void set_move_restriction (direction d, int r);
+	void check_lock (int x, int y, int* k);
 };
 
 #endif
