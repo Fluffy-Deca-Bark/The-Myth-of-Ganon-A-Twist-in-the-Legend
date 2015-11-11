@@ -25,7 +25,7 @@
     <ClInclude Include="Headers\SaveState.h" />
     <ClInclude Include="Headers\Sprite.h" />
     <ClInclude Include="Headers\MapBuilder.h" />
-    <ClInclude Include="Headers\SpriteNode.h" />
+    <ClInclude Include="Headers\StillSprite.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="etc\bass.dll" />
@@ -49,7 +49,7 @@
     <ClCompile Include="Source\SaveState.cpp" />
     <ClCompile Include="Source\Sprite.cpp" />
     <ClCompile Include="Source\MapBuilder.cpp" />
-    <ClCompile Include="Source\SpriteNode.cpp" />
+    <ClCompile Include="Source\StillSprite.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BF2F8F6C-2458-4682-AEC9-813F7B77C698}</ProjectGuid>
@@ -91,7 +91,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>\\Mac\Home\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source &amp; Headers\Headers;\\Mac\Home\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source &amp; Headers\etc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Z:\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source &amp; Headers\etc;Z:\Projects\The-Myth-of-Ganon-A-Twist-in-the-Legend\Source &amp; Headers\Headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

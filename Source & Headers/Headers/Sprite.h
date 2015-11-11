@@ -33,6 +33,7 @@ class Sprite : public Image
 		int frame_h;
 		int w_mod;
 		int h_mod;
+		int layer;
 		int stop_box_x1;
 		int stop_box_y1;
 		int stop_box_x2;
@@ -42,12 +43,19 @@ class Sprite : public Image
 		int interact_x2;
 		int interact_y2;
 		char path[FILE_PATH_SIZE];
+		
+		Sprite* ptr;
+		Sprite* sprite;
+
 
 	public:
 		Sprite ();
-		Sprite (int w, int h, const char* p);
-		Sprite (int w, int h);
-		Sprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, int screen_Y);
+		Sprite (int w, int h, int l, const char* p);
+		Sprite (int w, int h, int l);
+		Sprite (int w, int h, int l, int sheet_X, int sheet_Y, int screen_X, int screen_Y);
+		Sprite (Sprite* s, Sprite* p);
+
+
 		void load (const char* sub_folder_path, char* file_name);
 		void load_direct (char* file_path);
 		void set_position (int x, int y);
@@ -80,9 +88,36 @@ class Sprite : public Image
 		void move_d (direction d);
 		char* get_path();
 		char* get_name (char* buffer);
+		void set_layer (int l);
+		int get_layer();
 
+		void copy_base_data (Sprite* s);
+		virtual void copy_subclass_data (Sprite* s) = 0;
+		virtual void set_door_direction (direction d) = 0;
 
 		virtual void check_lock (int x1, int y1, int x2, int y2, int* k, bool v, iGraphics* iGraph) { };
+
+
+
+
+
+		Sprite* get_ptr();
+		Sprite* get_sprite();
+
+		void set_ptr (Sprite* p);
+		void set_sprite (Sprite* s);
+
+		Sprite* insert_node (Sprite* s);
+		virtual Sprite* create_node (Sprite* s) = 0;
+		void clear();
+		void draw_list (iGraphics* i);
+		void draw_node (iGraphics* i);
+
+		void print_node();
+		void print_sprite_file_name();
+		void print_node_line();
+
+		bool check_stop_box_collision (direction d, int n1, int n2);
 };
 
 #endif

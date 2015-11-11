@@ -1,5 +1,10 @@
 #include "Door.h"
 
+Door::Door ()
+{
+
+};
+
 Door::Door (int w, int h, int x, int y, direction d, door_state s)
 {
 	frame_w = w;
@@ -8,7 +13,16 @@ Door::Door (int w, int h, int x, int y, direction d, door_state s)
 	screen_y = y;
 	state = s;
 
-	set_direction (d);
+	set_door_direction (d);
+};
+
+Door* Door::create_node (Sprite* s)
+{
+	Door* p = new Door;
+	copy_base_data (p);
+	copy_subclass_data (p);
+	p->set_ptr (s);
+	return p;
 };
 
 void Door::update_stop_box()
@@ -39,11 +53,12 @@ door_state Door::get_state()
 void Door::set_state (door_state s)
 {
 	state = s;
+	set_door_direction (dir);
 };
 
 void Door::check_lock (int x1, int y1, int x2, int y2, int *k, bool v, iGraphics* iGraph)
 {
-	printf ("Door::check_lock\t%(%d, %d) (%d, %d) | %d | %d\n", x1, y1, x2, y2, *k, v);
+	//printf ("Door::check_lock\t%(%d, %d) (%d, %d) | %d | %d\n", x1, y1, x2, y2, *k, v);
 
 	int gap = 20;
 	int offset = 39;
@@ -88,7 +103,7 @@ void Door::check_lock (int x1, int y1, int x2, int y2, int *k, bool v, iGraphics
 	};
 };
 
-void Door::set_direction (direction d)
+void Door::set_door_direction (direction d)
 {
 	dir = d;
 
@@ -112,4 +127,10 @@ void Door::set_direction (direction d)
 direction Door::get_direction()
 {
 	return dir;
+};
+
+void Door::copy_subclass_data (Sprite* s)
+{
+	((Door*) s)->set_door_direction (dir);
+	((Door*) s)->set_state (state);
 };

@@ -6,9 +6,10 @@ Sprite::Sprite()
 	stop_box_y1 = -1;
 	stop_box_x2 = -1;
 	stop_box_y2 = -1;
+	layer = -1;
 };
 
-Sprite::Sprite (int w, int h)
+Sprite::Sprite (int w, int h, int l)
 {
 	frame_w = w;
 	frame_h = h;
@@ -19,9 +20,11 @@ Sprite::Sprite (int w, int h)
 	stop_box_y1 = -1;
 	stop_box_x2 = -1;
 	stop_box_y2 = -1;
+
+	layer = l;
 };
 
-Sprite::Sprite (int w, int h, const char* p)
+Sprite::Sprite (int w, int h, int l, const char* p)
 {
 	frame_w = w;
 	frame_h = h;
@@ -37,9 +40,11 @@ Sprite::Sprite (int w, int h, const char* p)
 	stop_box_y1 = -1;
 	stop_box_x2 = -1;
 	stop_box_y2 = -1;
+
+	layer = l;
 };
 
-Sprite::Sprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, int screen_Y)
+Sprite::Sprite (int w, int h, int l, int sheet_X, int sheet_Y, int screen_X, int screen_Y)
 {
 	frame_w = w;
 	frame_h = h;
@@ -54,6 +59,8 @@ Sprite::Sprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, int screen
 	stop_box_y1 = -1;
 	stop_box_x2 = -1;
 	stop_box_y2 = -1;
+
+	layer = l;
 };
 
 void Sprite::set_frame_w (int w)
@@ -209,6 +216,127 @@ void Sprite::draw (iGraphics* i)
 	i->draw_image (screen_x, screen_y, dw, dh, cx, cy, frame_w, frame_h, *this);
 };
 
+void Sprite::draw_node (iGraphics* i)
+{
+	/*sprite->select_frame (sheet_x, sheet_y);
+	sprite->set_position (screen_x, screen_y);
+	sprite->set_modifiers (w_mod, h_mod);*/
+	copy_base_data (sprite);
+	copy_subclass_data (sprite);
+
+	char* buffer = NULL;
+	buffer = sprite->get_name (buffer);
+	if (strcmp (buffer, "Spell") == 0 && sheet_x == 1) // Nayru's Love gira.
+	{
+		i->RotateBegin (0 % 360);
+		sprite->draw (i);
+		i->RotateEnd();
+	}
+	else
+		sprite->draw (i);
+};
+
+void Sprite::print_sprite_file_name()
+{
+	printf ("%s", sprite->get_path());
+};
+
+Sprite* Sprite::insert_node (Sprite* s)
+{
+	int l = s->get_layer();
+	int s_y = s->get_screen_y() - s->get_frame_h()/2;
+	int y = screen_y - frame_h/2;
+			
+	if (s == NULL)
+	{
+		printf ("Tried to insert a null sprite pointer to the list.\n");
+		return NULL;
+	};
+
+	if ((l > layer) || (l == layer) && (s_y >= y))
+	{
+		if (ptr == NULL)
+		{
+			//ptr = new Sprite (s, NULL);
+			ptr = s->create_node (ptr);
+			return ptr;
+		}
+		else
+		{
+			int p_y = ptr->get_screen_y() - ptr->get_frame_h()/2;
+
+			if ((l > ptr->get_layer()) || (l == ptr->get_layer()) && (s_y >= p_y))
+			{
+				ptr->insert_node (s);
+				return ptr;
+			}
+			else
+			{
+				//Sprite* temp = ptr;
+				//ptr = new Sprite (s, temp);
+				ptr = s->create_node (ptr);
+				return ptr;
+			};
+		};
+	}
+	else
+	{
+		printf ("Tried to insert a sprite to the list in the wrong order.\n");
+		return NULL;
+	};
+};
+
+bool Sprite::check_stop_box_collision (direction d, int n1, int n2)
+{
+	int gx1 = get_screen_x() + get_stop_box_x1();
+	int gy1 = get_screen_y() - get_stop_box_y1() + 2;
+	int gx2 = get_screen_x() + get_stop_box_x2() - 1;
+	int gy2 = get_screen_y() - get_stop_box_y2() + 1;
+	
+	int gx_r = max (gx1, gx2);
+	int gx_l = min (gx1, gx2);
+	int gy_d = max (gy1, gy2);
+	int gy_u = min (gy1, gy2);
+
+	int n_min = min (n1, n2);
+	int n_max = max (n1, n2);
+
+	switch (d)
+	{
+		case left: case right:
+			if (between (n_min, gy_u, n_max) ||
+				between (gy_u, n_min, gy_d) ||
+				between (n_min, gy_d, n_max) ||
+				between (gy_u, n_max, gy_d))
+				return true;
+			break;
+
+		case up: case down:
+			if (between (n_min, gx_l, n_max) ||
+				between (gx_l, n_min, gx_r) ||
+				between (n_min, gx_r, n_max) ||
+				between (gx_l, n_max, gx_r))
+				return true;
+			break;
+
+		default: return false;
+	};
+};
+
+void Sprite::copy_base_data (Sprite* s)
+{
+	s->set_position (screen_x, screen_y);
+	s->select_frame (sheet_x, sheet_y);
+	s->set_frame_w (frame_w);
+	s->set_frame_h (frame_h);
+	s->set_modifiers (w_mod, h_mod);
+	s->set_layer (layer);
+	s->set_stop_box (stop_box_x1, stop_box_y1, stop_box_x2, stop_box_y2);
+	//s->set_ptr (NULL);
+	
+	s->set_sprite (this);
+};
+
 void Sprite::move (int x, int y)
 {
 	static int last_step_right_leg = false;
@@ -352,4 +480,83 @@ void Sprite::set_modifiers (int wm, int hm)
 {
 	w_mod = wm;
 	h_mod = hm;
+};
+
+void Sprite::set_layer (int l)
+{
+	layer = l;
+};
+
+int Sprite::get_layer()
+{
+	return layer;
+};
+
+void copy_base_data (Sprite* s)
+{
+
+};
+
+
+
+
+void Sprite::set_ptr (Sprite* p)
+{
+	ptr = p;
+};
+
+void Sprite::clear()
+{
+	if (ptr != NULL)
+	{
+		ptr->clear();
+		delete ptr;
+		ptr = NULL;
+	};
+};
+
+
+void Sprite::print_node_line()
+{
+	if (layer == -1)
+	{
+		printf ("[head]\n");
+	}
+	else
+	{
+		char* buffer = NULL;
+		buffer = sprite->get_name (buffer);
+
+		printf ("[%s] @ %d : [%d, %d] [%d, %d] [%d x %d]\n", buffer, layer, sheet_x, sheet_y, screen_x, screen_y-frame_h/2, frame_w, frame_h);
+	};
+
+	if (ptr != NULL)
+		ptr->print_node_line();
+	else
+		printf ("[tail]\n\n");
+};
+
+void Sprite::draw_list (iGraphics* i)
+{
+	if (ptr != NULL)
+	{
+		ptr->draw_node (i);
+		ptr->draw_list (i);
+	};
+};
+
+
+Sprite* Sprite::get_ptr()
+{
+	return ptr;
+};
+
+Sprite* Sprite::get_sprite()
+{
+	return sprite;
+};
+
+void Sprite::set_sprite (Sprite* s)
+{
+	sprite = s;
 };

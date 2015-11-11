@@ -54,10 +54,10 @@
     <ClInclude Include="etc\freeglut_ext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\SpriteNode.h">
+    <ClInclude Include="Headers\Door.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\Door.h">
+    <ClInclude Include="Headers\StillSprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -112,10 +112,10 @@
     <ClCompile Include="Source\iGraphics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SpriteNode.cpp">
+    <ClCompile Include="Source\Door.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Door.cpp">
+    <ClCompile Include="Source\StillSprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

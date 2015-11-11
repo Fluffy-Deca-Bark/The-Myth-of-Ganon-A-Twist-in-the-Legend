@@ -4,7 +4,9 @@
 #include <string.h>
 #include <stdio.h>
 
-#define PROJECT_PATH "\\\\Mac\\Home\\Projects\\The-Myth-of-Ganon-A-Twist-in-the-Legend\\"
+//#define PROJECT_PATH "\\\\Mac\\Home\\Projects\\The-Myth-of-Ganon-A-Twist-in-the-Legend\\"
+#define PROJECT_PATH "Z:\\Projects\\The-Myth-of-Ganon-A-Twist-in-the-Legend\\"
+
 
 #define SCREEN_WIDTH (0 ? 1920 : 736)	//736
 #define SCREEN_HEIGHT (0 ? 1080 : 448)	//448

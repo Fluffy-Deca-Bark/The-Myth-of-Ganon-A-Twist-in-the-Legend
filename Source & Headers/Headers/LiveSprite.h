@@ -13,7 +13,11 @@ private:
 	int move_restriction[4];
 
 public:
-	LiveSprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, int screen_Y);
+	LiveSprite();
+	LiveSprite (int w, int h, int l, int sheet_X, int sheet_Y, int screen_X, int screen_Y);
+	LiveSprite* create_node (Sprite* s);
+
+
 	void set_dashing (bool dash);
 	void move_d (direction d);
 	void toggle_dashing();
@@ -21,7 +25,9 @@ public:
 	int get_current_speed();
 	//void set_allowed_to_move (direction d, bool b);
 	void set_move_restriction (direction d, int r);
-	void check_lock (int x, int y, int* k);
+	void set_door_direction (direction d) { };
+
+	void copy_subclass_data (Sprite* s);
 };
 
 #endif

@@ -1,6 +1,11 @@
 #include "LiveSprite.h"
 
-LiveSprite::LiveSprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, int screen_Y)
+LiveSprite::LiveSprite()
+{
+
+};
+
+LiveSprite::LiveSprite (int w, int h, int l, int sheet_X, int sheet_Y, int screen_X, int screen_Y)
 {
 	frame_w = w;
 	frame_h = h;
@@ -15,6 +20,24 @@ LiveSprite::LiveSprite (int w, int h, int sheet_X, int sheet_Y, int screen_X, in
 
 	for (int i=0; i<4; i++)
 		move_restriction[i] = -1;
+
+	layer = l;
+};
+
+LiveSprite* LiveSprite::create_node (Sprite* s)
+{
+	LiveSprite* p = new LiveSprite;
+	copy_base_data (p);
+	copy_subclass_data (p);
+	p->set_ptr (s);
+	return p;
+};
+
+void LiveSprite::copy_subclass_data (Sprite* s)
+{
+	((LiveSprite*) s)->set_dashing (dashing);
+	for (int i=0; i<4; i++)
+		((LiveSprite*) s)->set_move_restriction ((direction) i, move_restriction[i]);
 };
 
 void LiveSprite::move_d (direction d)
@@ -105,9 +128,4 @@ int LiveSprite::get_current_speed()
 void LiveSprite::set_move_restriction (direction d, int r)
 {
 	move_restriction[d] = r;
-};
-
-void LiveSprite::check_lock (int x, int y, int* k)
-{
-
 };
