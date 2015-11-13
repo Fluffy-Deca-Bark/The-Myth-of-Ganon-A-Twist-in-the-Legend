@@ -221,6 +221,7 @@ void Sprite::draw_node (iGraphics* i)
 	/*sprite->select_frame (sheet_x, sheet_y);
 	sprite->set_position (screen_x, screen_y);
 	sprite->set_modifiers (w_mod, h_mod);*/
+
 	copy_base_data (sprite);
 	copy_subclass_data (sprite);
 

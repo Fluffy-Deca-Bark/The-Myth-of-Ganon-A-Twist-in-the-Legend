@@ -441,10 +441,10 @@ void main_loop()
 
 
 	Sprite* door_ptr = NULL;
-	door.set_state (open);
 	door.update_stop_box();
 	door.set_position (SCREEN_WIDTH/2 - door.get_width()/2, 128);
 	door.set_door_direction (up);
+	door.set_state (open);
 	door.check_lock (0, 0, 0, 0, &keys_held, keys_visible, &iGraph);
 	door.set_layer (1);
 	door_ptr = sprite_list_head.insert_node (&door);
@@ -452,9 +452,9 @@ void main_loop()
 	//door.copy_subclass_data (door_ptr);
 	
 
-	door.set_door_direction (left);
 	door.set_position (40, 300);
 	door.check_lock (0, 0, 0, 0, &keys_held, keys_visible, &iGraph);
+	door.set_door_direction (left);
 	door.set_state (locked);
 	door_ptr = sprite_list_head.insert_node (&door);
 	door_ptr -> set_door_direction (door.get_direction());
