@@ -64,6 +64,8 @@ class SaveState
 
 		void alter_rupees (int r);
 		void alter_mp (float p);
+		void alter_max_mp (float p);
+
 		void print_report();
 		void print_table();
 		void graphics_print_table (Graphics g);

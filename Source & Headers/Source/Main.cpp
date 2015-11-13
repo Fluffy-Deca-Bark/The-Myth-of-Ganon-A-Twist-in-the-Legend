@@ -14,7 +14,7 @@ SaveState save_state;
 MapBuilder map_builder;
 iGraphics iGraph;
 StillSprite Ganondorfs_castle (736, 448, 0);
-LiveSprite Ganondorf (40, 40, 5, 1, 0, 80, 190);
+LiveSprite Ganondorf (40, 40, 5, 1, 0, 80, BIG_SCREEN ? 700 : 190);
 Sprite* G_ptr = NULL;
 
 StillSprite portal (337, 270, 1);
@@ -65,7 +65,10 @@ void check_stop_boxes();
 void check_locked_doors();
 bool Ganondorf_allowed_to_move[4] = { true, true, true, true };
 bool print_list = false;
+bool fullscreen = true;
 
+int portal_x (int i);
+int easter_egg_x (int i);
 
 StillSprite sprite_list_head;
 
@@ -79,18 +82,18 @@ void load_images()
 //	Ganondorfs_castle.LoadPNGImage (Ganondorfs_castle_path);
 //
 
-	Ganondorfs_castle.load (TR, "Ganondorf's Castle.png");
+	Ganondorfs_castle.load (TR, "tile_mockup.png");
 	Ganondorfs_castle.set_position (0, 0);
 	Ganondorfs_castle.select_frame (0, 0);
 	
 
 	Ganondorf.load	(CO, "Ganondorf.png");
 	Ganondorf.select_frame (0, 2);
-	Ganondorf.set_position (SCREEN_WIDTH/2 - Ganondorf.get_width()/2, 345);
+	Ganondorf.set_position (SCREEN_WIDTH/2 - Ganondorf.get_width(), BIG_SCREEN ? 800 : 345);
 	portal.load		(CO, "Portal.png");
 	medallion.load	(CO, "Medallion.png");
 	easter_egg.load (CO, "Easter Egg.png");
-	forest_map.load	(TR, "Floresta 1.png");
+	forest_map.load	(TR, "Ganondorf\'s Castle Tileset.png");
 	heart.load		(CO, "Heart.png");
 	rupee.load		(CO, "Rupee.png");
 	mp.load			(CO, "Mana bar.png");
@@ -111,15 +114,18 @@ void load_images()
 
 	Epona.load		(CO, "Epona.png");
 	Epona.select_frame (1, 0);
-	Epona.set_position (360, 230);
+	Epona.set_position (360, BIG_SCREEN ? 700 : 230);
 
 	door.load (CO, "Door.png");
+
+
+	iGraph.SetFullscreen (fullscreen);
 };
 
 void main_loop()
 {
-	if (current_map == 0)
-		iGraph.DrawImage2D (0,0,736,448,0,0,736,448,Ganondorfs_castle);
+	//if (current_map == 0)
+		iGraph.DrawImage2D (0,0,SCREEN_WIDTH,SCREEN_HEIGHT,0,0,SCREEN_WIDTH,SCREEN_HEIGHT,Ganondorfs_castle);
 	//Ganondorf.draw (&iGraph);
 	//Ganondorf.print_pos();
 	if (Ganondorf_visible)
@@ -129,17 +135,24 @@ void main_loop()
 		G_ptr = sprite_list_head.insert_node (&Ganondorf);
 	};
 
-	int portal_y = 280;
+
+
+
+
+
+
+	int portal_y = BIG_SCREEN ? 400 : 280;
+	int medallion_y = portal_y - 60;
 
 	for (int i=0; i<5; i++)
 	{
 		portal.select_frame (i,0);
-		portal.set_position (-107 + i*120, portal_y);
+		portal.set_position (portal_x(i), portal_y);
 		portal.set_layer (portal.get_sheet_x() == 2 ? 4 : 5); // Water is an exception.
 		sprite_list_head.insert_node (&portal);
 	};
 
-	portal.set_position (-109 + 5*120, portal_y);
+	portal.set_position (portal_x(5), portal_y);
 	switch (save_state.get_phase())
 	{
 		case 0: 
@@ -170,37 +183,54 @@ void main_loop()
 		if (save_state.get_temple(i))
 		{
 			medallion.select_frame (i, 0);
-			medallion.set_position (38 + i*120, 220);
+			medallion.set_position (portal_x(i) + 146, medallion_y);
 			medallion.set_layer (1);
 			sprite_list_head.insert_node (&medallion);
 		};
 	};
 
+
+
+
+
+
+
+
 	for (int i=0; i<6; i++)
 		if (save_state.get_easter_egg(i))
 		{
 			easter_egg.select_frame (i, 0);
-			easter_egg.set_position (19 + (SCREEN_WIDTH / 2) - ((3-i) * 109) - (30 * (3-i>0)), 414);
+			//easter_egg.set_position (90 + (SCREEN_WIDTH / 2) - ((3-i) * 109) - (30 * (3-i>0)), 414);
+			easter_egg.set_position (easter_egg_x (i), 700);
 			easter_egg.set_layer (5);
 			sprite_list_head.insert_node (&easter_egg);
 		};
+		
 
 	if (save_state.light())
 	{
 		int i = 5;
 		easter_egg.select_frame (i+1, 0);
-		easter_egg.set_position (605, 352);
+		//easter_egg.set_position (605, 352);
+		easter_egg.set_position (easter_egg_x (5), 700-62);
 		easter_egg.set_layer (5);
 		sprite_list_head.insert_node (&easter_egg);
 	};
 
+
+
+
+
+
+
+
 	int statue_padding = 50;
-	int statue_y = 350;
+	int statue_y =  BIG_SCREEN ? 800 : 350;
 	statue.select_frame (0, 0);
-	statue.set_position (SCREEN_WIDTH/2 - statue.get_width()/2 - statue_padding, statue_y);
+	statue.set_position (SCREEN_WIDTH/2 - statue.get_width() - statue_padding, statue_y);
 	statue.set_layer (5);
 	sprite_list_head.insert_node (&statue);
-	statue.set_position (SCREEN_WIDTH/2 - statue.get_width()/2 + statue_padding, statue_y);
+	statue.set_position (SCREEN_WIDTH/2 - statue.get_width() + statue_padding, statue_y);
 	statue.set_layer (5);
 	sprite_list_head.insert_node (&statue);
 	
@@ -223,7 +253,7 @@ void main_loop()
 
 
 
-	//Epona.set_position ((SCREEN_WIDTH - Epona.get_frame_w()) / 2 - 12, 345);
+	Epona.set_position ((SCREEN_WIDTH - Epona.get_frame_w()) / 2 - 12, 345);
 	if (Ganondorf.get_screen_x() + Ganondorf.get_frame_w()/2 > Epona.get_screen_x() + Epona.get_frame_w()/2)
 		Epona.select_frame (1, 0);
 	if (Ganondorf.get_screen_x() + Ganondorf.get_frame_w()/2 < Epona.get_screen_x() + Epona.get_frame_w()/2)
@@ -239,10 +269,13 @@ void main_loop()
 	int whole_hearts = floor (hearts);
 	float fraction = hearts - whole_hearts;
 	int heart_pad = 21;
+	int heart_y_1 = BIG_SCREEN ? -60 : 20;
+	int heart_y_2 = heart_y_1 + 20;
+
 	for (int i=0; i<20; i++)
 	{
-		if (i < 10)				heart.set_position (heart_pad*i + 20, 20);
-		else					heart.set_position (heart_pad*(i-10) + 20, 40);
+		if (i < 10)				heart.set_position (heart_pad*i + 20, heart_y_1);
+		else					heart.set_position (heart_pad*(i-10) + 20, heart_y_2);
 		
 
 		if (i < whole_hearts)				heart.select_frame (0, 0);
@@ -261,6 +294,36 @@ void main_loop()
 			sprite_list_head.insert_node (&heart);
 		};
 	};
+
+
+
+
+	int mp_y_1 = heart_y_1 + 19;
+	int mp_y_2 = mp_y_1 + 19;
+
+	for (int i=0; i<save_state.get_max_mp(); i++)
+	{
+		if (i==0)
+			mp.select_frame (0, 0);
+		else if (i<save_state.get_max_mp()-1)
+		{
+			if (save_state.get_mp() >= i)
+				mp.select_frame (1,0);
+			else
+				mp.select_frame (2,0);
+		}
+		else
+			mp.select_frame (3,0);
+
+		mp.set_position (24 + i, 
+			save_state.get_heart_containers() > 10 ? mp_y_2 : mp_y_1);
+
+		mp.set_layer (10);
+		sprite_list_head.insert_node (&mp);
+	};
+
+
+
 
 
 
@@ -382,48 +445,28 @@ void main_loop()
 	
 
 
-
-
-	for (int i=0; i<save_state.get_max_mp(); i++)
-	{
-		if (i==0)
-			mp.select_frame (0, 0);
-		else if (i<save_state.get_max_mp()-1)
-		{
-			if (save_state.get_mp() >= i)
-				mp.select_frame (1,0);
-			else
-				mp.select_frame (2,0);
-		}
-		else
-			mp.select_frame (3,0);
-
-		mp.set_position (24 + i, 
-			save_state.get_heart_containers() > 10 ? 55 : 36);
-
-		mp.set_layer (10);
-		sprite_list_head.insert_node (&mp);
-	};
+	
 
 
 
+	int spell_keys_y = heart_y_1;
 
 	if (keys_visible)
 	{
 
 		//Farore's Wind
-		keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*3 - 10, 10 + keyboard.get_height());
+		keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*3 - 10, spell_keys_y + keyboard.get_height());
 		keyboard.select_frame (0, 0);
 		keyboard.set_layer (10);
 		sprite_list_head.insert_node (&keyboard);
 
 		// Nayru's Love
-		keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*2 - 10, 10 + keyboard.get_height());
+		keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*2 - 10, spell_keys_y + keyboard.get_height());
 		keyboard.select_frame (1, 0);
 		sprite_list_head.insert_node (&keyboard);
 
 		// Din's Fire
-		keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*1 - 10, 10 + keyboard.get_height());
+		keyboard.set_position (SCREEN_WIDTH - keyboard.get_width()*1 - 10, spell_keys_y + keyboard.get_height());
 		keyboard.select_frame (2, 0);
 		sprite_list_head.insert_node (&keyboard);
 
@@ -439,26 +482,26 @@ void main_loop()
 	};
 
 
-
-	Sprite* door_ptr = NULL;
-	door.update_stop_box();
-	door.set_position (SCREEN_WIDTH/2 - door.get_width()/2, 128);
-	door.set_door_direction (up);
-	door.set_state (open);
-	door.check_lock (0, 0, 0, 0, &keys_held, keys_visible, &iGraph);
-	door.set_layer (1);
-	door_ptr = sprite_list_head.insert_node (&door);
-	door_ptr -> set_door_direction (door.get_direction());
-	//door.copy_subclass_data (door_ptr);
 	
+	//Sprite* door_ptr = NULL;
+	//door.update_stop_box();
+	//door.set_position (SCREEN_WIDTH/2 - door.get_width()/2, 128);
+	//door.set_door_direction (up);
+	//door.set_state (open);
+	//door.check_lock (0, 0, 0, 0, &keys_held, keys_visible, &iGraph);
+	//door.set_layer (1);
+	//door_ptr = sprite_list_head.insert_node (&door);
+	//door_ptr -> set_door_direction (door.get_direction());
+	////door.copy_subclass_data (door_ptr);
+	//
 
-	door.set_position (40, 300);
-	door.check_lock (0, 0, 0, 0, &keys_held, keys_visible, &iGraph);
-	door.set_door_direction (left);
-	door.set_state (locked);
-	door_ptr = sprite_list_head.insert_node (&door);
-	door_ptr -> set_door_direction (door.get_direction());
-	//door.copy_subclass_data (door_ptr);
+	//door.set_position (40, 300);
+	//door.check_lock (0, 0, 0, 0, &keys_held, keys_visible, &iGraph);
+	//door.set_door_direction (left);
+	//door.set_state (locked);
+	//door_ptr = sprite_list_head.insert_node (&door);
+	//door_ptr -> set_door_direction (door.get_direction());
+	////door.copy_subclass_data (door_ptr);
 
 	
 
@@ -599,6 +642,11 @@ void KeyboardInput (int key, int state, int x, int y)
 		Ganondorf.move_d (up);
 
 	if (keyboard_key[' ']) print_list = true;
+	if (keyboard_key['/']) 
+	{
+		fullscreen = !fullscreen;
+		iGraph.SetFullscreen (fullscreen);
+	};
 	
 	if (keyboard_key['e']) cast_Dins_Fire();
 	if (keyboard_key['w']) cast_Nayrus_Love();
@@ -626,6 +674,9 @@ void KeyboardInput (int key, int state, int x, int y)
 			
 	if (keyboard_key[',']) save_state.alter_mp (-5);
 	if (keyboard_key['.']) save_state.alter_mp (5);
+	if (keyboard_key['1']) save_state.alter_max_mp (-5);
+	if (keyboard_key['2']) save_state.alter_max_mp (5);
+
 
 	if (keyboard_key['s']) save_state.gain_heart_container (save_state.first_heart_container(0));
 	if (keyboard_key['a']) save_state.lose_heart_container (save_state.first_heart_container(1));
@@ -871,6 +922,43 @@ int min (int a, int b)
 {
 	return (a <= b ? a : b);
 };
+
+int portal_x (int i)
+{
+	int width = 337;
+	int gap = -130;
+	int offset = width;
+	int sign = (i-2 >0) ? 1 : -1;
+
+	int big_x = (SCREEN_WIDTH/2) - (3 * (width + gap)) + (i * (width + gap)) - 70;
+	int small_x = -107 + i*120;
+
+
+	if (BIG_SCREEN)
+		return big_x;
+	else
+		return small_x;
+};
+
+
+int easter_egg_x (int i)
+{
+	int width = 83;
+	int gap = 160;
+	int offset = 70;
+	int sign = (i-2 >0) ? 1 : -1;
+
+	int big_x = (SCREEN_WIDTH/2) - (3 * (width + gap)) + (i * (width + gap)) + offset;
+	int small_x = -107 + i*120;
+
+
+	if (BIG_SCREEN)
+		return big_x;
+	else
+		return small_x;
+};
+
+
 
 void halt()
 {

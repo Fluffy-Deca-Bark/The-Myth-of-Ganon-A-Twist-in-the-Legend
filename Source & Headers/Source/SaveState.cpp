@@ -374,6 +374,13 @@ void SaveState::alter_mp (float p)
 		mp = max_mp;
 };
 
+void SaveState::alter_max_mp (float p)
+{
+	if (max_mp + p > 0 && max_mp + p <= 200)
+		max_mp += p;
+	alter_mp(0);
+};
+
 int SaveState::get_DF()
 {
 	return casting_Dins_Fire;

@@ -1,22 +1,18 @@
 - Temples -
-001000
+000000
 - Heart containers -
-11111110000000000
+00000000000000000
 - Hearts -
-19.75
+3
 - Mana -
-190.0
+100.0
 - Max mana -
-200.0
+100.0
 - Max stamina -
 100.0
 - Rupees -
-123
+0
 - Spells -
 111
 - Easter eggs -
-000000
-
-
-SpriteNode:LiveSprite
-Sprite::stop_bounding_box
+0000001

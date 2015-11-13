@@ -7,9 +7,9 @@
 //#define PROJECT_PATH "\\\\Mac\\Home\\Projects\\The-Myth-of-Ganon-A-Twist-in-the-Legend\\"
 #define PROJECT_PATH "Z:\\Projects\\The-Myth-of-Ganon-A-Twist-in-the-Legend\\"
 
-
-#define SCREEN_WIDTH (0 ? 1920 : 736)	//736
-#define SCREEN_HEIGHT (0 ? 1080 : 448)	//448
+#define BIG_SCREEN 1
+#define SCREEN_WIDTH (BIG_SCREEN ? 1440 : 736)	//736
+#define SCREEN_HEIGHT (BIG_SCREEN ? 800 : 448)	//448
 
 #define TILE_SIZE (16)
 #define MAX_RUPEES (999)
@@ -20,6 +20,7 @@
 #define CO "Resources\\Sprites\\Chars\\Ongoing\\"
 #define CS "Resources\\Sprites\\Chars\\Sheet\\"
 #define TR "Resources\\Sprites\\Terrenos\\"
+
 
 void cat_path (char* ptr, const char* sub_folder_path, const char* file_name);
 //void OldKeyboardInput (int key, int state, int x, int y);

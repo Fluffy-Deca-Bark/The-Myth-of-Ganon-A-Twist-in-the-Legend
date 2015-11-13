@@ -14,7 +14,7 @@ MapBuilder::MapBuilder()
 	int arguments = 0;
 	int current_argument = 0;
 	char map_file_path[FILE_PATH_SIZE];
-	cat_path (map_file_path, SH, "Files/MapFileBG.txt");
+	cat_path (map_file_path, SH, "Files\\MapFileBG.txt");
 	fopen_s (&pFile, map_file_path , "r");
 	
 	if (pFile == NULL) printf("Error opening background map file\n");
@@ -71,6 +71,8 @@ MapBuilder::MapBuilder()
 			else if (strcmp(argument_buffer[0], "St")==0)
 				St(atoi(argument_buffer[1]), atoi(argument_buffer[2]), atoi(argument_buffer[3]), atoi(argument_buffer[4]), atoi(argument_buffer[5]), atoi(argument_buffer[6]));
 			
+
+			int abc=5;
 		};
 		
 		fclose (pFile);
@@ -90,11 +92,8 @@ void MapBuilder::Rect (int tx, int ty, int x, int y, int w, int h)
 
 	for (int i=0; i<h; i++)
 	{
-		for (int j=0; j<w; j++)
-		{
-			map_list_tail->new_ptr(tx, ty, (j*TILE_SIZE)+x, (i*TILE_SIZE)+y);
-			map_list_tail = map_list_tail->get_ptr();
-		};
+		Row (tx, ty, x, y+(TILE_SIZE*i), w);
+		print_map_list();
 	};
 };
 
@@ -165,4 +164,21 @@ MapNode* MapBuilder::get_list_tail()
 void MapBuilder::delete_list()
 {
 	map_list_head->delete_ptr();
+};
+
+
+void MapBuilder::print_map_list()
+{
+	MapNode* p = map_list_head->get_ptr();
+
+	printf ("----Printing MapNode list...----\n");
+
+	while (p != NULL)
+	{
+		printf ("Tile (%d, %d) @ position (%d, %d)\n", p->get_sheet_x(), p->get_sheet_y(), p->get_screen_x(), p->get_screen_y());
+
+		p = p->get_ptr();
+	};
+
+	printf ("\n\n");
 };

@@ -8,7 +8,12 @@ class iGraphics : public Graphics
 {
 public:
 
+	iGraphics();
+
 	int invert (int y);
+
+	int screen_offset_x;
+	int screen_offset_y;
 
 	void draw_image (Image i);
 	void draw_image (int x, int y, int w, int h, Image i);
@@ -24,6 +29,12 @@ public:
 	void fill_circle (int x, int y, int r);
 	void fill_triangle (int x1, int y1, int x2, int y2, int x3, int y3);
 	void fill_rectangle (int x1, int y1, int x2, int y2);
+
+	void tweak_offset_x (int x);
+	void tweak_offset_y (int y);
+
+	int offset_x();
+	int offset_y();
 };
 
 #endif

@@ -26,6 +26,7 @@ class MapBuilder
 		MapNode* get_list_head();
 		MapNode* get_list_tail();
 		void delete_list();
+		void print_map_list();
 };
 
 #endif /* defined(__MapBuilder__) */
