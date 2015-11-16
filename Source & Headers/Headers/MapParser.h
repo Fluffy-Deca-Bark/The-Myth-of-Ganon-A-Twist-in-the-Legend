@@ -28,7 +28,7 @@ class MapParser
 		void Stretch3	(int tx, int ty, int x, int y, int w, int h);
 		void Stretch4	(int tx, int ty, int x, int y, int w, int h);
 		void set_working_map (int n);
-		void Assign_file (char* c, int n);
+		void Assign_file (int n, char* c);
 
 		Sprite* get_working_map();
 };

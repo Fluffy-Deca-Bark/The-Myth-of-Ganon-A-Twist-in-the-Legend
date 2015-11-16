@@ -37,8 +37,10 @@ void MapParser::parse()
 			int arg_i, line_i;
 			for (arg_i=0, line_i=0; line_buffer[line_i]!='('; arg_i++, line_i++)
 			{
-				if (line_buffer[line_i] != ' ')
+				if (line_buffer[line_i] != ' ' && line_buffer[line_i] != '\t')
 					argument_buffer[0][arg_i] = line_buffer[line_i];
+				else
+					argument_buffer[0][arg_i] = '\0';
 			};
 
 			argument_buffer[0][arg_i] = '\0';
@@ -65,10 +67,13 @@ void MapParser::parse()
 				
 			for (current_argument = 1; current_argument <= arguments; current_argument++)
 			{
-				for (arg_i=0; line_buffer[line_i]!=',' && line_buffer[line_i]!=')'; arg_i++, line_i++)
+				for (arg_i=0; line_buffer[line_i]!=',' && line_buffer[line_i]!=')'; line_i++)
 				{
-					//if (line_buffer[line_i] != ' ')
+					if (line_buffer[line_i] != ' ')
+					{
 						argument_buffer[current_argument][arg_i] = line_buffer[line_i];
+						arg_i++;
+					};
 				};
 				argument_buffer[current_argument][arg_i] = '\0';
 				line_i++;
@@ -97,7 +102,7 @@ void MapParser::parse()
 			else if (strcmp(argument_buffer[0], "Stretch4")==0)
 				Stretch4(atoi(argument_buffer[1]), atoi(argument_buffer[2]), atoi(argument_buffer[3]), atoi(argument_buffer[4]), atoi(argument_buffer[5]), atoi(argument_buffer[6]));
 			else if (strcmp(argument_buffer[0], "Assign_file")==0)
-				Assign_file(argument_buffer[1], atoi(argument_buffer[2]));
+				Assign_file(atoi(argument_buffer[1]), argument_buffer[2]);
 			else if (strcmp(argument_buffer[0], "Select")==0)
 				set_working_map (atoi(argument_buffer[1]));
 		};
@@ -185,7 +190,7 @@ void MapParser::set_working_map (int n)
 	working_map = map[n];
 };
 
-void MapParser::Assign_file (char* c, int n)
+void MapParser::Assign_file (int n, char* c)
 {
 	if (strcmp (map[n]->get_path(), "") == 0)
 		map[n]->load (TR, c);
