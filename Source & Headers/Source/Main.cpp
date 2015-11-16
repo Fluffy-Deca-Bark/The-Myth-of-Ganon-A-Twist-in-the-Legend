@@ -95,7 +95,7 @@ void load_images()
 
 	Ganondorf.load	(CO, "Ganondorf.png");
 	Ganondorf.select_frame (0, 2);
-	Ganondorf.set_position (SCREEN_WIDTH/2 - Ganondorf.get_width(), BIG_SCREEN ? 800 : 345);
+	Ganondorf.set_position (SCREEN_WIDTH/2 - Ganondorf.get_width(), BIG_SCREEN ? 720 : 345);
 	portal.load		(CO, "Portal.png");
 	medallion.load	(CO, "Medallion.png");
 	easter_egg.load (CO, "Easter Egg.png");
@@ -234,7 +234,7 @@ void main_loop()
 
 
 	int statue_padding = 50;
-	int statue_y =  BIG_SCREEN ? 800 : 350;
+	int statue_y =  BIG_SCREEN ? 700 : 350;
 	statue.select_frame (0, 0);
 	statue.set_position (SCREEN_WIDTH/2 - statue.get_width() - statue_padding, statue_y);
 	statue.set_layer (5);

@@ -268,8 +268,7 @@ Sprite* Sprite::insert_node (Sprite* s)
 
 			if ((l > ptr->get_layer()) || (l == ptr->get_layer()) && (s_y >= p_y))
 			{
-				ptr->insert_node (s);
-				return ptr;
+				return (ptr->insert_node(s));
 			}
 			else
 			{

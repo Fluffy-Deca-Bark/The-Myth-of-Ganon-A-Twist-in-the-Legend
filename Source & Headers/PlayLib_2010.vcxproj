@@ -53,6 +53,7 @@
     <ProjectGuid>{BF2F8F6C-2458-4682-AEC9-813F7B77C698}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>PlayLib_2010</RootNamespace>
+    <ProjectName>The Myth of Ganon - A Twist in the Legend</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -12,7 +12,11 @@ class MapParser
 		Sprite* list_head;
 		Sprite* map[7]; /*[6] = G's Castle*/
 		Sprite* working_map;
+		Sprite* last_added_tile;
+		bool keep_last_added_tile;
+		int current_layer;
 		StillSprite buffer_sprite;
+		
 
 	public:
 	
@@ -29,6 +33,8 @@ class MapParser
 		void Stretch4	(int tx, int ty, int x, int y, int w, int h);
 		void set_working_map (int n);
 		void Assign_file (int n, char* c);
+		void Stop (int x, int y, int w, int h);
+		void Layer (int l);
 
 		int p_atoi (char* c);
 

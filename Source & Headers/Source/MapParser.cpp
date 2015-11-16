@@ -15,6 +15,9 @@ MapParser::MapParser (Sprite* head, Sprite* forest, Sprite* fire, Sprite* water,
 
 	buffer_sprite.set_frame_w (TILE_SIZE);
 	buffer_sprite.set_frame_h (TILE_SIZE);
+	last_added_tile = NULL;
+	current_layer = 0;
+	keep_last_added_tile = false;
 };
 
 void MapParser::parse()
@@ -32,6 +35,7 @@ void MapParser::parse()
 	if (pFile == NULL) printf("Error opening background map file\n");
 	else 
 	{
+		keep_last_added_tile = false;
 		while (fgets(line_buffer, size, pFile) != NULL)
 		{
 			int arg_i, line_i;
@@ -46,11 +50,11 @@ void MapParser::parse()
 			argument_buffer[0][arg_i] = '\0';
 			line_i++;
 			
-			if (strcmp(argument_buffer[0], "Select") == 0)
+			if (strcmp(argument_buffer[0], "Select")==0 || strcmp(argument_buffer[0], "Layer")==0)
 				arguments = 1;
 			if (strcmp(argument_buffer[0], "Assign_file") == 0)
 				arguments = 2;
-			else if (strcmp(argument_buffer[0], "Tile")==0)
+			else if (strcmp(argument_buffer[0], "Tile")==0 || strcmp(argument_buffer[0], "Stop")==0)
 				arguments = 4;
 			else if (strcmp(argument_buffer[0], "Rect")==0 || strcmp(argument_buffer[0], "As_is")==0 || strcmp(argument_buffer[0],"Stretch3")==0 || strcmp(argument_buffer[0], "Stretch4") == 0)
 				arguments = 6;
@@ -105,6 +109,10 @@ void MapParser::parse()
 				Assign_file(p_atoi(argument_buffer[1]), argument_buffer[2]);
 			else if (strcmp(argument_buffer[0], "Select")==0)
 				set_working_map (p_atoi(argument_buffer[1]));
+			else if (strcmp(argument_buffer[0], "Stop")==0)
+				Stop(p_atoi(argument_buffer[1]), p_atoi(argument_buffer[2]), p_atoi(argument_buffer[3]), p_atoi(argument_buffer[4]));
+			else if (strcmp(argument_buffer[0], "Layer")==0)
+				Layer (p_atoi(argument_buffer[1]));
 		};
 		
 		fclose (pFile);
@@ -113,16 +121,24 @@ void MapParser::parse()
 
 void MapParser::Tile (int tx, int ty, int x, int y)
 {
+	Sprite* p;
 	buffer_sprite.select_frame (tx, ty);
 	buffer_sprite.set_position (x, y);
-	buffer_sprite.set_layer (3);
+	buffer_sprite.set_layer (current_layer);
 	buffer_sprite.copy_base_data (working_map);
-	list_head->insert_node (working_map);
+	p = list_head->insert_node (working_map);
+	
+	if (!keep_last_added_tile)
+		last_added_tile = p;
+
+	keep_last_added_tile = true;
 };
 
 void MapParser::Rect (int tx, int ty, int x, int y, int w, int h)
 {
 	//printf("Rect function called with arguments %d, %d, %d, %d, %d and %d.\n", tx, ty, x, y, w, h);
+
+	keep_last_added_tile = false;
 
 	for (int i=0; i<h; i++)
 	{
@@ -134,6 +150,8 @@ void MapParser::Row (int tx, int ty, int x, int y, int w)
 {
 	//printf("Row  function called with arguments %d, %d, %d, %d and %d.\n", tx, ty, x, y, w);
 
+	keep_last_added_tile = false;
+
 	for (int i=0; i<w; i++)
 	{
 		Tile (tx, ty, x + i*TILE_SIZE, y);
@@ -144,6 +162,8 @@ void MapParser::Col (int tx, int ty, int x, int y, int h)
 {
 	//printf("Col  function called with arguments %d, %d, %d, %d and %d.\n", tx, ty, x, y, h);
 
+	keep_last_added_tile = false;
+
 	for (int i=0; i<h; i++)
 	{
 		Tile (tx, ty, x, y + i*TILE_SIZE);
@@ -153,6 +173,8 @@ void MapParser::Col (int tx, int ty, int x, int y, int h)
 void MapParser::As_is (int tx, int ty, int x, int y, int w, int h)
 {
 	//printf("\'As is\' function called with arguments %d, %d, %d, %d, %d and %d.\n", tx, ty, x, y, w, h);
+
+	keep_last_added_tile = false;
 
 	for (int i=0; i<h; i++)
 	{
@@ -166,6 +188,8 @@ void MapParser::As_is (int tx, int ty, int x, int y, int w, int h)
 void MapParser::Stretch3 (int tx, int ty, int x, int y, int w, int h)
 {
 	//printf("\'St\' function called with arguments %d, %d, %d, %d, %d and %d.\n", tx, ty, x, y, w, h);
+
+	keep_last_added_tile = false;
 
 	Tile (tx, ty, x, y);
 	Row (tx+1, ty, x+TILE_SIZE, y, w-2);
@@ -224,4 +248,16 @@ int MapParser::p_atoi (char* c)
 	}
 	else
 		return atoi (c);
+};
+
+
+void MapParser::Stop (int x, int y, int w, int h)
+{
+	last_added_tile->set_stop_box (x, y, w+x, h+y);
+};
+
+
+void MapParser::Layer (int l)
+{
+	current_layer = l;
 };
