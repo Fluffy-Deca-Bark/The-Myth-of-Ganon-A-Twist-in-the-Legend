@@ -4,14 +4,13 @@
 #include "SaveState.h"
 #include "LiveSprite.h"
 #include "iGraphics.h"
-#include "MapBuilder.h"
+#include "MapParser.h"
 // #include "Sprite.h"
 #include "StillSprite.h"
 #include "Door.h"
 #include <math.h>
 
 SaveState save_state;
-MapBuilder map_builder;
 iGraphics iGraph;
 StillSprite Ganondorfs_castle (736, 448, 0);
 LiveSprite Ganondorf (40, 40, 5, 1, 0, 80, BIG_SCREEN ? 700 : 190);
@@ -20,7 +19,6 @@ Sprite* G_ptr = NULL;
 StillSprite portal (337, 270, 1);
 StillSprite medallion (50, 50, 1);
 StillSprite easter_egg (83, 58, 5); //49, 51
-StillSprite forest_map (TILE_SIZE, TILE_SIZE, 3);
 StillSprite Epona (48, 31, 5);
 StillSprite heart (22, 19, 10);
 StillSprite rupee (21, 24, 10);
@@ -65,14 +63,22 @@ void check_stop_boxes();
 void check_locked_doors();
 bool Ganondorf_allowed_to_move[4] = { true, true, true, true };
 bool print_list = false;
-bool fullscreen = true;
+bool fullscreen = false;
 
 int portal_x (int i);
 int easter_egg_x (int i);
 
 StillSprite sprite_list_head;
+StillSprite forest_map (TILE_SIZE, TILE_SIZE, 3);
+StillSprite fire_map (TILE_SIZE, TILE_SIZE, 3);
+StillSprite water_map (TILE_SIZE, TILE_SIZE, 3);
+StillSprite spirit_map (TILE_SIZE, TILE_SIZE, 3);
+StillSprite shadow_map (TILE_SIZE, TILE_SIZE, 3);
+StillSprite light_map (TILE_SIZE, TILE_SIZE, 3);
+StillSprite home_map (TILE_SIZE, TILE_SIZE, 3);
+MapParser map_parser (&sprite_list_head, &forest_map, &fire_map, &water_map, &spirit_map, &shadow_map, &light_map, &home_map);
 
-bool see_generated_map = false;
+bool see_generated_map = true;
 
 void load_images()
 {
@@ -117,6 +123,9 @@ void load_images()
 	Epona.set_position (360, BIG_SCREEN ? 700 : 230);
 
 	door.load (CO, "Door.png");
+
+	water_map.load (TR, "Água3.png");
+
 
 
 	iGraph.SetFullscreen (fullscreen);
@@ -236,20 +245,6 @@ void main_loop()
 	
 
 
-
-	if (see_generated_map)
-	{
-		MapNode* current_node = map_builder.get_list_head()->get_ptr();
-		while (current_node != NULL)
-		{
-			forest_map.set_position (current_node->get_screen_x(), current_node->get_screen_y());
-			forest_map.select_frame (current_node->get_sheet_x(), current_node->get_sheet_y());
-			//forest_map.draw (&iGraph);
-			forest_map.set_layer (3);
-			sprite_list_head.insert_node (&forest_map);
-			current_node = current_node->get_ptr();
-		};
-	};
 
 
 
@@ -506,12 +501,27 @@ void main_loop()
 	
 
 
-	sprite_list_head.draw_list (&iGraph);
+
+
+
+
+	if (see_generated_map)
+	{
+		//water_map.print_path();
+		map_parser.parse();
+	};
+
+
+
+
+
+
 	if (print_list)
 	{
 		sprite_list_head.print_node_line();
 		print_list = false;
 	};
+	sprite_list_head.draw_list (&iGraph);
 	display_bounding_boxes();
 	display_stop_boxes();
 	check_stop_boxes();
@@ -543,9 +553,6 @@ int main (void)
 		iGraph.StartMainLoop();
 	};
 
-
-	map_builder.delete_list();
-	
 	halt();
 
 	return 0;

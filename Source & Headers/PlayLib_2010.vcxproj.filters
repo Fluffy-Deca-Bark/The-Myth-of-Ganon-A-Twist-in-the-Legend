@@ -24,12 +24,6 @@
     <ClInclude Include="Headers\LiveSprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\MapBuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\MapNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Headers\SaveState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -58,6 +52,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Headers\StillSprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\MapParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -97,12 +94,6 @@
     <ClCompile Include="Source\SaveState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MapNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MapBuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -116,6 +107,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\StillSprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MapParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

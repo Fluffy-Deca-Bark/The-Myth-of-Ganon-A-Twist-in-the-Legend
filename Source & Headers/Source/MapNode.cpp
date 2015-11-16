@@ -10,7 +10,6 @@ MapNode::MapNode (int cx, int cy, int x, int y)
 	ptr = NULL;
 };
 
-
 void MapNode::set_ptr (MapNode* p)
 {
 	ptr = p;

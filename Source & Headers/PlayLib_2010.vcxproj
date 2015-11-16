@@ -21,10 +21,9 @@
     <ClInclude Include="Headers\Door.h" />
     <ClInclude Include="Headers\iGraphics.h" />
     <ClInclude Include="Headers\LiveSprite.h" />
-    <ClInclude Include="Headers\MapNode.h" />
     <ClInclude Include="Headers\SaveState.h" />
     <ClInclude Include="Headers\Sprite.h" />
-    <ClInclude Include="Headers\MapBuilder.h" />
+    <ClInclude Include="Headers\MapParser.h" />
     <ClInclude Include="Headers\StillSprite.h" />
   </ItemGroup>
   <ItemGroup>
@@ -45,10 +44,9 @@
     <ClCompile Include="Source\iGraphics.cpp" />
     <ClCompile Include="Source\LiveSprite.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\MapNode.cpp" />
     <ClCompile Include="Source\SaveState.cpp" />
     <ClCompile Include="Source\Sprite.cpp" />
-    <ClCompile Include="Source\MapBuilder.cpp" />
+    <ClCompile Include="Source\MapParser.cpp" />
     <ClCompile Include="Source\StillSprite.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
