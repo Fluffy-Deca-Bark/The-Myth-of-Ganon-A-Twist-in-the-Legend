@@ -128,7 +128,7 @@ void load_images()
 
 
 
-	iGraph.SetFullscreen (fullscreen);
+	iGraph.SetFullscreen (false);
 };
 
 void main_loop()

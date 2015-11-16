@@ -88,23 +88,23 @@ void MapParser::parse()
 			};
 
 			if (strcmp(argument_buffer[0], "Tile")==0)
-				Tile(atoi(argument_buffer[1]), atoi(argument_buffer[2]), atoi(argument_buffer[3]), atoi(argument_buffer[4]));
+				Tile(p_atoi(argument_buffer[1]), p_atoi(argument_buffer[2]), p_atoi(argument_buffer[3]), p_atoi(argument_buffer[4]));
 			else if (strcmp(argument_buffer[0], "Rect")==0)
-				Rect(atoi(argument_buffer[1]), atoi(argument_buffer[2]), atoi(argument_buffer[3]), atoi(argument_buffer[4]), atoi(argument_buffer[5]), atoi(argument_buffer[6]));
+				Rect(p_atoi(argument_buffer[1]), p_atoi(argument_buffer[2]), p_atoi(argument_buffer[3]), p_atoi(argument_buffer[4]), p_atoi(argument_buffer[5]), p_atoi(argument_buffer[6]));
 			else if (strcmp(argument_buffer[0], "Row")==0)
-				Row(atoi(argument_buffer[1]), atoi(argument_buffer[2]), atoi(argument_buffer[3]), atoi(argument_buffer[4]), atoi(argument_buffer[5]));
+				Row(p_atoi(argument_buffer[1]), p_atoi(argument_buffer[2]), p_atoi(argument_buffer[3]), p_atoi(argument_buffer[4]), p_atoi(argument_buffer[5]));
 			else if (strcmp(argument_buffer[0], "Col")==0)
-				Col(atoi(argument_buffer[1]), atoi(argument_buffer[2]), atoi(argument_buffer[3]), atoi(argument_buffer[4]), atoi(argument_buffer[5]));
+				Col(p_atoi(argument_buffer[1]), p_atoi(argument_buffer[2]), p_atoi(argument_buffer[3]), p_atoi(argument_buffer[4]), p_atoi(argument_buffer[5]));
 			else if (strcmp(argument_buffer[0], "As_is")==0)
-				As_is(atoi(argument_buffer[1]), atoi(argument_buffer[2]), atoi(argument_buffer[3]), atoi(argument_buffer[4]), atoi(argument_buffer[5]), atoi(argument_buffer[6]));
+				As_is(p_atoi(argument_buffer[1]), p_atoi(argument_buffer[2]), p_atoi(argument_buffer[3]), p_atoi(argument_buffer[4]), p_atoi(argument_buffer[5]), p_atoi(argument_buffer[6]));
 			else if (strcmp(argument_buffer[0], "Stretch3")==0)
-				Stretch3(atoi(argument_buffer[1]), atoi(argument_buffer[2]), atoi(argument_buffer[3]), atoi(argument_buffer[4]), atoi(argument_buffer[5]), atoi(argument_buffer[6]));
+				Stretch3(p_atoi(argument_buffer[1]), p_atoi(argument_buffer[2]), p_atoi(argument_buffer[3]), p_atoi(argument_buffer[4]), p_atoi(argument_buffer[5]), p_atoi(argument_buffer[6]));
 			else if (strcmp(argument_buffer[0], "Stretch4")==0)
-				Stretch4(atoi(argument_buffer[1]), atoi(argument_buffer[2]), atoi(argument_buffer[3]), atoi(argument_buffer[4]), atoi(argument_buffer[5]), atoi(argument_buffer[6]));
+				Stretch4(p_atoi(argument_buffer[1]), p_atoi(argument_buffer[2]), p_atoi(argument_buffer[3]), p_atoi(argument_buffer[4]), p_atoi(argument_buffer[5]), p_atoi(argument_buffer[6]));
 			else if (strcmp(argument_buffer[0], "Assign_file")==0)
-				Assign_file(atoi(argument_buffer[1]), argument_buffer[2]);
+				Assign_file(p_atoi(argument_buffer[1]), argument_buffer[2]);
 			else if (strcmp(argument_buffer[0], "Select")==0)
-				set_working_map (atoi(argument_buffer[1]));
+				set_working_map (p_atoi(argument_buffer[1]));
 		};
 		
 		fclose (pFile);
@@ -200,4 +200,28 @@ void MapParser::Assign_file (int n, char* c)
 Sprite* MapParser::get_working_map()
 {
 	return working_map;
+};
+
+int MapParser::p_atoi (char* c)
+{
+	if (c[0] == '*')
+	{
+		return TILE_SIZE * atoi (c+1);
+		/*char* buffer;
+		int i;
+		int number;
+
+		for (i = 1; c[i] != '\0'; i++);
+
+		buffer = new char[i];
+		
+		for (i = 1; c[i] != '\0'; i++)
+		{
+			buffer[i-1] = c[i];
+		};
+
+		number = atoi(buffer);*/
+	}
+	else
+		return atoi (c);
 };

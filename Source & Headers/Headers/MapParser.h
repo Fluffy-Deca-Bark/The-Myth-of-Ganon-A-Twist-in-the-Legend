@@ -30,6 +30,8 @@ class MapParser
 		void set_working_map (int n);
 		void Assign_file (int n, char* c);
 
+		int p_atoi (char* c);
+
 		Sprite* get_working_map();
 };
 
