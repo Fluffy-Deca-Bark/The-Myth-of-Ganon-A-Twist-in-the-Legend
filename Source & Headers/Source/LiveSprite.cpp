@@ -22,6 +22,7 @@ LiveSprite::LiveSprite (int w, int h, int l, int sheet_X, int sheet_Y, int scree
 		move_restriction[i] = -1;
 
 	layer = l;
+	to_delete = true;
 };
 
 LiveSprite* LiveSprite::create_node (Sprite* s)

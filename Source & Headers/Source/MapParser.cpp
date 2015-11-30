@@ -115,6 +115,10 @@ void MapParser::parse()
 				Layer (p_atoi(argument_buffer[1]));
 		};
 		
+
+		for (int i=0; i<size; i++)
+			line_buffer[i]=0;
+
 		fclose (pFile);
 	};
 };

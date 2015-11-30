@@ -17,7 +17,6 @@ public:
 	LiveSprite (int w, int h, int l, int sheet_X, int sheet_Y, int screen_X, int screen_Y);
 	LiveSprite* create_node (Sprite* s);
 
-
 	void set_dashing (bool dash);
 	void move_d (direction d);
 	void toggle_dashing();
