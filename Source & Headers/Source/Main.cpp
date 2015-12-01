@@ -186,7 +186,7 @@ void main_loop()
 			case 1:	portal.set_stop_box (140, 120, 200, 150); break;
 			case 2: portal.set_stop_box (-1, -1, -1, -1); break;
 			case 3: portal.set_stop_box (160, 115, 187, 140); break;
-			case 4: portal.set_stop_box (140, 115, 210, 145); break;
+			case 4: portal.set_stop_box (140, 115, 205, 140); break;
 		};
 		
 		
