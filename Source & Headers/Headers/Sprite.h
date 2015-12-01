@@ -50,6 +50,7 @@ class Sprite : public Image
 		int interact_y2;
 		char path[FILE_PATH_SIZE];
 		bool to_delete;
+		bool is_generated;
 		
 		Sprite* ptr;
 		Sprite* sprite;
@@ -85,7 +86,10 @@ class Sprite : public Image
 		int get_stop_box_x2();
 		int get_stop_box_y2();
 		bool get_to_delete();
+		bool get_generated();
+
 		void set_to_delete (bool b);
+		void set_generated (bool b);
 		bool stop_box_is_set();
 		void set_stop_box (int x1, int y1, int x2, int y2);
 		void select_frame (int x, int y);
@@ -119,7 +123,7 @@ class Sprite : public Image
 		Sprite* insert_node_RECURSIVELY (Sprite* s);
 		Sprite* insert_node (Sprite* s);
 		virtual Sprite* create_node (Sprite* s) = 0;
-		void clear();
+		void clear (bool only_generated);
 		void draw_list (iGraphics* i);
 		void draw_node (iGraphics* i);
 		sort_condition sort_next (Sprite* previous);

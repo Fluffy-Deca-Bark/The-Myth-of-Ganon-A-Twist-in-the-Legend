@@ -8,6 +8,7 @@ Sprite::Sprite()
 	stop_box_y2 = -1;
 	layer = -1;
 	to_delete = false;
+	is_generated = false;
 };
 
 Sprite::Sprite (int w, int h, int l)
@@ -24,6 +25,7 @@ Sprite::Sprite (int w, int h, int l)
 
 	layer = l;
 	to_delete = false;
+	is_generated = false;
 };
 
 Sprite::Sprite (int w, int h, int l, const char* p)
@@ -45,6 +47,7 @@ Sprite::Sprite (int w, int h, int l, const char* p)
 
 	layer = l;
 	to_delete = false;
+	is_generated = false;
 };
 
 Sprite::Sprite (int w, int h, int l, int sheet_X, int sheet_Y, int screen_X, int screen_Y)
@@ -65,6 +68,7 @@ Sprite::Sprite (int w, int h, int l, int sheet_X, int sheet_Y, int screen_X, int
 
 	layer = l;
 	to_delete = false;
+	is_generated = false;
 };
 
 void Sprite::set_frame_w (int w)
@@ -394,6 +398,7 @@ void Sprite::copy_base_data (Sprite* s)
 	s->set_layer (layer);
 	s->set_stop_box (stop_box_x1, stop_box_y1, stop_box_x2, stop_box_y2);
 	s->set_to_delete (to_delete);
+	s->set_generated (is_generated);
 	//s->set_ptr (NULL);
 	
 	s->set_sprite (this);
@@ -567,7 +572,7 @@ void Sprite::set_ptr (Sprite* p)
 	ptr = p;
 };
 
-void Sprite::clear()
+void Sprite::clear (bool only_generated)
 {
 	/*if (ptr != NULL)
 	{
@@ -577,21 +582,25 @@ void Sprite::clear()
 	};*/
 
 
-	Sprite* current = this;
-	Sprite* p = ptr;
+	Sprite* previous = this;
+	Sprite* current = ptr;
 	Sprite* next;
 	
-	while (p != NULL)
+	while (current != NULL)
 	{
-		next = p->get_ptr();
+		next = current->get_ptr();
 			
-		if (p->get_to_delete())
+		if ((!only_generated && current->get_to_delete()) || (only_generated && current->get_generated()))
 		{
-			delete p;
-			current->set_ptr (next);
+			delete current;
+			current = next;
+			previous->set_ptr (next);
+		}
+		else
+		{
+			previous = current;
+			current = next;
 		};
-
-		p = next;
 	};
 };
 
@@ -606,7 +615,7 @@ void Sprite::print_node_line()
 		char* buffer = NULL;
 		buffer = sprite->get_name (buffer);
 
-		printf ("[%s] @ %d : [%d, %d] [%d, %d] [%d x %d]\n", buffer, layer, sheet_x, sheet_y, screen_x, screen_y-frame_h/2, frame_w, frame_h);
+		printf ("[%s] @ %d : [%d, %d] [%d, %d] [%d x %d] [generated: %s] [delete: %s]\n", buffer, layer, sheet_x, sheet_y, screen_x, screen_y-frame_h/2, frame_w, frame_h, is_generated ? "yes" : "no", to_delete ? "yes" : "no");
 	};
 
 	if (ptr != NULL)
@@ -677,23 +686,24 @@ sort_condition Sprite::sort_next (Sprite* previous)
 
 void Sprite::sort_list()
 {
-	Sprite* p = ptr;
+	Sprite* current = ptr;
 	Sprite* previous = this;
 
 	sort_condition sc = move_on;
-	while (p != NULL)
+	while (current != NULL)
 	{
-		sc = p->sort_next (previous);
+		sc = current->sort_next (previous);
 		
 		if (sc == must_restart)
 		{
-			p = ptr;
+			current = ptr;
 			previous = this;
 			sc = move_on;
 		}
-		else
+		else if (sc == move_on)
 		{
-			p = p->get_ptr();
+			previous = current;
+			current = current->get_ptr();
 		};
 	};
 };
@@ -706,4 +716,14 @@ bool Sprite::get_to_delete()
 void Sprite::set_to_delete (bool b)
 {
 	to_delete = b;
+};
+
+void Sprite::set_generated (bool b)
+{
+	is_generated = b;
+};
+
+bool Sprite::get_generated()
+{
+	return is_generated;
 };

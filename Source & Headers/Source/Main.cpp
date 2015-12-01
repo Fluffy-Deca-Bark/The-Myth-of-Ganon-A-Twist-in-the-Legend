@@ -78,6 +78,7 @@ StillSprite light_map (TILE_SIZE, TILE_SIZE, 3);
 StillSprite home_map (TILE_SIZE, TILE_SIZE, 3);
 MapParser map_parser (&sprite_list_head, &forest_map, &fire_map, &water_map, &spirit_map, &shadow_map, &light_map, &home_map);
 
+bool has_generated_map = false;
 bool see_generated_map = true;
 
 void load_images()
@@ -131,7 +132,7 @@ void load_images()
 
 
 
-	map_parser.parse();
+	//map_parser.parse();
 
 	iGraph.SetFullscreen (false);
 };
@@ -178,6 +179,18 @@ void main_loop()
 		portal.set_position (portal_x(i), portal_y);
 		portal.set_layer (portal.get_sheet_x() == 2 ? 4 : 5); // Water is an exception.
 		portal.set_to_delete (true);
+
+		switch (i)
+		{
+			case 0:	portal.set_stop_box (140, 110, 200, 120); break;
+			case 1:	portal.set_stop_box (140, 120, 200, 150); break;
+			case 2: portal.set_stop_box (-1, -1, -1, -1); break;
+			case 3: portal.set_stop_box (160, 115, 187, 140); break;
+			case 4: portal.set_stop_box (140, 115, 210, 145); break;
+		};
+		
+		
+
 		sprite_list_head.insert_node (&portal);
 	};
 
@@ -356,7 +369,6 @@ void main_loop()
 
 
 
-
 	
 
 
@@ -487,12 +499,12 @@ void main_loop()
 
 	
 	Sprite* door_ptr = NULL;
-	door.set_position (SCREEN_WIDTH/2 - door.get_width()/2, 128);
+	door.set_position (SCREEN_WIDTH/2 - door.get_width()/2, 48);
 	door.set_door_direction (up);
 	door.set_state (open);
 	door.update_stop_box();
 	door.check_lock (0, 0, 0, 0, &keys_held, keys_visible, &iGraph);
-	door.set_layer (1);
+	door.set_layer (2);
 	door.set_to_delete (true);
 	door_ptr = sprite_list_head.insert_node (&door);
 	door.copy_subclass_data (door_ptr);
@@ -521,8 +533,16 @@ void main_loop()
 
 	if (see_generated_map)
 	{
-		//water_map.print_path();
-		//map_parser.parse();
+		if (!has_generated_map)
+		{
+			map_parser.parse();
+			has_generated_map = true;
+		};
+	}
+	else if (!see_generated_map)
+	{
+		sprite_list_head.clear (true);
+		has_generated_map = false;
 	};
 
 
@@ -579,7 +599,7 @@ void main_loop()
 	display_stop_boxes();
 	check_stop_boxes();
 	scan_virtual_keyboard();
-	sprite_list_head.clear();
+	sprite_list_head.clear (false);
 	sprite_list_head.sort_list();
 
 

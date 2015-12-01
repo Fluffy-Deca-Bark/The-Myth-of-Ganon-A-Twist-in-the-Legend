@@ -129,6 +129,9 @@ void MapParser::Tile (int tx, int ty, int x, int y)
 	buffer_sprite.select_frame (tx, ty);
 	buffer_sprite.set_position (x, y);
 	buffer_sprite.set_layer (current_layer);
+	buffer_sprite.set_to_delete (false);
+	buffer_sprite.set_generated (true);
+
 	buffer_sprite.copy_base_data (working_map);
 	p = list_head->insert_node (working_map);
 	
