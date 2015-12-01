@@ -213,7 +213,45 @@ void MapParser::Stretch4 (int tx, int ty, int x, int y, int w, int h)
 {
 	//printf("\'St\' function called with arguments %d, %d, %d, %d, %d and %d.\n", tx, ty, x, y, w, h);
 
-	printf ("Stretch4 called, but no definition available right now.\n");
+	//printf ("Stretch4 called, but no definition available right now.\n");
+
+
+	keep_last_added_tile = false;
+
+	Tile (tx, ty, x, y);
+	Tile (tx, ty + 3, x, y + TILE_SIZE*h);
+	Tile (tx + 3, ty, x + TILE_SIZE*w, y);
+	Tile (tx + 3, ty + 3, x + TILE_SIZE*w, y + TILE_SIZE*h);
+
+	for (int i = 0; i < w - 1; i++)
+	{
+		Tile (tx + (i % 2) + 1, ty, x + TILE_SIZE * (i + 1), y);
+		Tile (tx + (i % 2) + 1, ty + 3, x + TILE_SIZE * (i + 1), y + h*TILE_SIZE);
+	};
+
+	for (int j = 0; j < h-1; j++)
+	{
+		Tile (tx, ty + (j % 2) + 1, x, y + TILE_SIZE * (j + 1));
+		Tile (tx + 3, ty + (j % 2) + 1, x + TILE_SIZE * w, y + TILE_SIZE * (j + 1));
+	}
+
+	for (int j = 0; j < h; j++)
+	{
+		for (int i = 0; i < w; i++)
+		{
+			Tile (tx + 1 + i % 2, ty + 1 + j % 2, x + TILE_SIZE*(i + 1), y + (j % 2) * TILE_SIZE*(j + 1));
+		}
+	}
+
+
+	/*Row (tx + 1, ty, x + TILE_SIZE, y, w - 2);
+	Tile (tx + 2, ty, x + (w - 2)*TILE_SIZE, y);
+	Col (tx, ty + 1, x, y + TILE_SIZE, h - 2);
+	Tile (tx, ty + 2, x, y + (h - 2)*TILE_SIZE);
+	Row (tx + 1, ty + 2, x + TILE_SIZE, y + (h - 2)*TILE_SIZE, w - 3);
+	Col (tx + 2, ty + 1, x + (w - 2)*TILE_SIZE, y + TILE_SIZE, h - 3);
+	Tile (tx + 2, ty + 2, x + (w - 2)*TILE_SIZE, y + (h - 2)*TILE_SIZE);
+	Rect (tx + 1, ty + 1, x + TILE_SIZE, y + TILE_SIZE, w - 3, h - 3);*/
 };
 
 void MapParser::set_working_map (int n)

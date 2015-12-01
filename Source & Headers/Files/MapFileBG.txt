@@ -1,7 +1,7 @@
-Assign_file (5, Indoors1.png)
+Assign_file (5, Chão.png)
 Select (5)
 Layer (0)
-Stretch3 (12, 3, *1, *1, 90, 70)
+Stretch4 (24, 14, *1, *4, 4, 4)
 
 Assign_file (6, Ruínas.png)
 Select	(6)
