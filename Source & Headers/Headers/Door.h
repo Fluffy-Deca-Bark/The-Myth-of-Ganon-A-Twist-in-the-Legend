@@ -19,6 +19,7 @@ class Door : public Sprite
 		int contact_y1;
 		int contact_x2;
 		int contact_y2;
+		int ID;
 
 	public:
 		Door (int w, int h, int x, int y, direction d, door_state s);
@@ -33,6 +34,8 @@ class Door : public Sprite
 		void set_door_direction (direction d);
 		void copy_subclass_data (Sprite* s);
 		direction get_direction();
+		int get_ID();
+		void set_ID (int id);
 };
 
 #endif

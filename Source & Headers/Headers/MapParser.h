@@ -13,6 +13,7 @@ class MapParser
 		Sprite* map[7]; /*[6] = G's Castle*/
 		Sprite* working_map;
 		Sprite* last_added_tile;
+		Door* door;
 		bool keep_last_added_tile;
 		int current_layer;
 		StillSprite buffer_sprite;
@@ -20,7 +21,7 @@ class MapParser
 
 	public:
 	
-		MapParser (Sprite* head, Sprite* forest, Sprite* fire, Sprite* water, Sprite* spirit, Sprite* shadow, Sprite* light, Sprite* home);
+		MapParser (Sprite* head, Sprite* forest, Sprite* fire, Sprite* water, Sprite* spirit, Sprite* shadow, Sprite* light, Sprite* home, Door* door_ptr);
 
 		void parse();
 
@@ -35,6 +36,7 @@ class MapParser
 		void Assign_file (int n, char* c);
 		void Stop (int x, int y, int w, int h);
 		void Layer (int l);
+		void PutDoor (door_state s, direction d, int x, int y, int id);
 
 		int p_atoi (char* c);
 

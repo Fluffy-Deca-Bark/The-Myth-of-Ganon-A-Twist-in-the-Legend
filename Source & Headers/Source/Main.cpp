@@ -76,7 +76,7 @@ StillSprite spirit_map (TILE_SIZE, TILE_SIZE, 3);
 StillSprite shadow_map (TILE_SIZE, TILE_SIZE, 3);
 StillSprite light_map (TILE_SIZE, TILE_SIZE, 3);
 StillSprite home_map (TILE_SIZE, TILE_SIZE, 3);
-MapParser map_parser (&sprite_list_head, &forest_map, &fire_map, &water_map, &spirit_map, &shadow_map, &light_map, &home_map);
+MapParser map_parser (&sprite_list_head, &forest_map, &fire_map, &water_map, &spirit_map, &shadow_map, &light_map, &home_map, &door);
 
 bool has_generated_map = false;
 bool see_generated_map = true;
@@ -126,10 +126,6 @@ void load_images()
 	door.load (CO, "Door.png");
 
 	water_map.load (TR, "Água3.png");
-
-
-
-
 
 
 	//map_parser.parse();
@@ -498,7 +494,7 @@ void main_loop()
 
 
 	
-	Sprite* door_ptr = NULL;
+	/*Sprite* door_ptr = NULL;
 	door.set_position (SCREEN_WIDTH/2 - door.get_width()/2, 48);
 	door.set_door_direction (up);
 	door.set_state (open);
@@ -517,7 +513,7 @@ void main_loop()
 	door.set_to_delete (true);
 	door_ptr = sprite_list_head.insert_node (&door);
 	door_ptr -> set_door_direction (door.get_direction());
-	door.copy_subclass_data (door_ptr);
+	door.copy_subclass_data (door_ptr);*/
 
 	
 
@@ -583,7 +579,8 @@ void main_loop()
 
 	if (print_list)
 	{
-		sprite_list_head.print_node_line();
+		//sprite_list_head.print_node_line();
+		sprite_list_head.print_whole_list();
 		print_list = false;
 	};
 	//sprite_list_head.draw_list (&iGraph);

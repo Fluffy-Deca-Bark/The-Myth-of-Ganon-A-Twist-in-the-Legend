@@ -2,7 +2,7 @@
 #include "Defines.h"
 #include <stdlib.h>
 
-MapParser::MapParser (Sprite* head, Sprite* forest, Sprite* fire, Sprite* water, Sprite* spirit, Sprite* shadow, Sprite* light, Sprite* home)
+MapParser::MapParser (Sprite* head, Sprite* forest, Sprite* fire, Sprite* water, Sprite* spirit, Sprite* shadow, Sprite* light, Sprite* home, Door* door_ptr)
 {
 	list_head = head;
 	map[0] = forest;
@@ -12,6 +12,8 @@ MapParser::MapParser (Sprite* head, Sprite* forest, Sprite* fire, Sprite* water,
 	map[4] = shadow;
 	map[5] = light;
 	map[6] = home;
+
+	door = door_ptr;
 
 	buffer_sprite.set_frame_w (TILE_SIZE);
 	buffer_sprite.set_frame_h (TILE_SIZE);
@@ -56,6 +58,8 @@ void MapParser::parse()
 				arguments = 2;
 			else if (strcmp(argument_buffer[0], "Tile") == 0 || strcmp(argument_buffer[0], "Stop") == 0)
 				arguments = 4;
+			else if (strcmp(argument_buffer[0], "Door") == 0)
+				arguments = 5;
 			else if (strcmp(argument_buffer[0], "Rect") == 0 || strcmp(argument_buffer[0], "As_is") == 0 || strcmp(argument_buffer[0], "Stretch3") == 0 || strcmp(argument_buffer[0], "Stretch4") == 0)
 				arguments = 6;
 			else if (strcmp(argument_buffer[0], "Row") == 0 || strcmp(argument_buffer[0], "Col") == 0)
@@ -113,6 +117,29 @@ void MapParser::parse()
 				Stop(p_atoi(argument_buffer[1]), p_atoi(argument_buffer[2]), p_atoi(argument_buffer[3]), p_atoi(argument_buffer[4]));
 			else if (strcmp(argument_buffer[0], "Layer") == 0)
 				Layer (p_atoi(argument_buffer[1]));
+			else if (strcmp(argument_buffer[0], "Door") == 0)
+			{
+				door_state s_buffer;
+				direction d_buffer;
+				
+				if (strcmp(argument_buffer[1], "open") == 0)
+					s_buffer = open;
+				else if (strcmp(argument_buffer[1], "locked") == 0)
+					s_buffer = locked;
+				else if (strcmp(argument_buffer[1], "barred") == 0)
+					s_buffer = barred;
+
+				if (strcmp(argument_buffer[2], "up") == 0)
+					d_buffer = up;
+				else if (strcmp(argument_buffer[2], "left") == 0)
+					d_buffer = left;
+				else if (strcmp(argument_buffer[2], "down") == 0)
+					d_buffer = down;
+				else if (strcmp(argument_buffer[2], "right") == 0)
+					d_buffer = right;
+
+				PutDoor (s_buffer, d_buffer, atoi(argument_buffer[3]), atoi(argument_buffer[4]), atoi(argument_buffer[5]));
+			};
 		};
 
 
@@ -308,6 +335,19 @@ void MapParser::Stop (int x, int y, int w, int h)
 void MapParser::Layer (int l)
 {
 	current_layer = l;
+};
+
+void MapParser::PutDoor (door_state s, direction d, int x, int y, int id)
+{
+	door->set_door_direction (d);
+	door->set_state (s);
+	door->set_position (x, y);
+	door->set_ID (id);
+	door->update_stop_box();
+	door->set_layer (current_layer);
+	door->set_generated (true);
+	door->set_to_delete (false);
+	list_head->insert_node (door);
 };
 
 

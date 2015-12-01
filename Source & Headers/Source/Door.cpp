@@ -12,6 +12,7 @@ Door::Door (int w, int h, int x, int y, direction d, door_state s)
 	screen_x = x;
 	screen_y = y;
 	state = s;
+	ID = -1;
 
 	set_door_direction (d);
 };
@@ -22,6 +23,7 @@ Door* Door::create_node (Sprite* s)
 	copy_base_data (p);
 	copy_subclass_data (p);
 	p->set_ptr (s);
+	ID = -1;
 	return p;
 };
 
@@ -127,10 +129,20 @@ void Door::set_door_direction (direction d)
 direction Door::get_direction()
 {
 	return dir;
+}
+int Door::get_ID()
+{
+	return ID;
+}
+void Door::set_ID(int id)
+{
+	ID = id;
 };
 
 void Door::copy_subclass_data (Sprite* s)
 {
 	((Door*) s)->set_door_direction (dir);
 	((Door*) s)->set_state (state);
+	((Door*) s)->set_ID (ID);
+
 };

@@ -98,7 +98,6 @@ class Sprite : public Image
 		void print_pos ();
 		void move (int x, int y);
 		void move (int n, axis a);
-		void move_d (direction d);
 		char* get_path();
 		char* get_name (char* buffer);
 		void set_layer (int l);
@@ -129,9 +128,9 @@ class Sprite : public Image
 		sort_condition sort_next (Sprite* previous);
 		void sort_list();
 
-		void print_node();
 		void print_sprite_file_name();
 		void print_node_line();
+		void print_whole_list();
 
 		bool check_stop_box_collision (direction d, int n1, int n2);
 };

@@ -619,9 +619,22 @@ void Sprite::print_node_line()
 	};
 
 	if (ptr != NULL)
-		ptr->print_node_line();
+	{
+		//ptr->print_node_line();
+	}
 	else
 		printf ("[tail]\n\n");
+};
+
+void Sprite::print_whole_list()
+{
+	Sprite* current = ptr;
+
+	while (current != NULL)
+	{
+		current->print_node_line();
+		current = current->get_ptr();
+	};
 };
 
 void Sprite::draw_list (iGraphics* i)
