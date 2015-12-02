@@ -559,14 +559,6 @@ int Sprite::get_layer()
 	return layer;
 };
 
-void copy_base_data (Sprite* s)
-{
-
-};
-
-
-
-
 void Sprite::set_ptr (Sprite* p)
 {
 	ptr = p;

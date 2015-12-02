@@ -133,6 +133,8 @@ class Sprite : public Image
 		void print_whole_list();
 
 		bool check_stop_box_collision (direction d, int n1, int n2);
+
+		virtual void do_something() = 0;
 };
 
 #endif

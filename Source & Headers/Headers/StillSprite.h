@@ -15,6 +15,8 @@ class StillSprite : public Sprite
 		StillSprite* create_node (Sprite* s);
 		void copy_subclass_data (Sprite* s) { };
 		void set_door_direction (direction d) { };
+
+		void StillSprite::do_something() { };
 };
 
 

@@ -2,7 +2,7 @@
 #include "Defines.h"
 #include <stdlib.h>
 
-MapParser::MapParser (Sprite* head, Sprite* forest, Sprite* fire, Sprite* water, Sprite* spirit, Sprite* shadow, Sprite* light, Sprite* home, Door* door_ptr)
+MapParser::MapParser (Sprite* head, Sprite* forest, Sprite* fire, Sprite* water, Sprite* spirit, Sprite* shadow, Sprite* light, Sprite* home, Door* door_ptr, Button* button_ptr)
 {
 	list_head = head;
 	map[0] = forest;
@@ -14,6 +14,7 @@ MapParser::MapParser (Sprite* head, Sprite* forest, Sprite* fire, Sprite* water,
 	map[6] = home;
 
 	door = door_ptr;
+	button = button_ptr;
 
 	buffer_sprite.set_frame_w (TILE_SIZE);
 	buffer_sprite.set_frame_h (TILE_SIZE);
@@ -58,7 +59,7 @@ void MapParser::parse()
 				arguments = 2;
 			else if (strcmp(argument_buffer[0], "Tile") == 0 || strcmp(argument_buffer[0], "Stop") == 0)
 				arguments = 4;
-			else if (strcmp(argument_buffer[0], "Door") == 0)
+			else if (strcmp(argument_buffer[0], "Door") == 0 || strcmp(argument_buffer[0], "Button") == 0)
 				arguments = 5;
 			else if (strcmp(argument_buffer[0], "Rect") == 0 || strcmp(argument_buffer[0], "As_is") == 0 || strcmp(argument_buffer[0], "Stretch3") == 0 || strcmp(argument_buffer[0], "Stretch4") == 0)
 				arguments = 6;
@@ -121,7 +122,7 @@ void MapParser::parse()
 			{
 				door_state s_buffer;
 				direction d_buffer;
-				
+
 				if (strcmp(argument_buffer[1], "open") == 0)
 					s_buffer = open;
 				else if (strcmp(argument_buffer[1], "locked") == 0)
@@ -139,6 +140,17 @@ void MapParser::parse()
 					d_buffer = right;
 
 				PutDoor (s_buffer, d_buffer, atoi(argument_buffer[3]), atoi(argument_buffer[4]), atoi(argument_buffer[5]));
+			}
+			else if (strcmp(argument_buffer[0], "Button") == 0)
+			{
+				button_type t_buffer;
+
+				if (strcmp(argument_buffer[1], "toggle") == 0)
+					t_buffer = toggle;
+				else if (strcmp(argument_buffer[1], "hold") == 0)
+					t_buffer = hold;
+
+				PutButton (t_buffer, atoi(argument_buffer[2]), atoi(argument_buffer[3]), atoi(argument_buffer[4]));
 			};
 		};
 
@@ -350,8 +362,17 @@ void MapParser::PutDoor (door_state s, direction d, int x, int y, int id)
 	list_head->insert_node (door);
 };
 
-
-
+void MapParser::PutButton (button_type t, int x, int y, int id)
+{
+	button->set_type (t);
+	button->set_state (idle);
+	button->set_position (x, y);
+	button->set_ID (id);
+	button->set_layer (current_layer);
+	button->set_generated (true);
+	button->set_to_delete (false);
+	list_head->insert_node (button);
+};
 
 
 

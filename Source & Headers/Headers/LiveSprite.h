@@ -27,6 +27,7 @@ public:
 	void set_door_direction (direction d) { };
 
 	void copy_subclass_data (Sprite* s);
+	void LiveSprite::do_something() { };
 };
 
 #endif

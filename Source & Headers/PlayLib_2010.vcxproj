@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="etc\Audio.h" />
+    <ClInclude Include="Headers\Button.h" />
     <ClInclude Include="Headers\Defines.h" />
     <ClInclude Include="etc\freeglut.h" />
     <ClInclude Include="etc\freeglut_ext.h" />
@@ -45,6 +46,7 @@
     <ClCompile Include="Source\LiveSprite.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\SaveState.cpp" />
+    <ClCompile Include="Source\Button.cpp" />
     <ClCompile Include="Source\Sprite.cpp" />
     <ClCompile Include="Source\MapParser.cpp" />
     <ClCompile Include="Source\StillSprite.cpp" />

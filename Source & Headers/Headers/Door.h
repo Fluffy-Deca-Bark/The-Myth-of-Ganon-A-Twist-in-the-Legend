@@ -36,6 +36,8 @@ class Door : public Sprite
 		direction get_direction();
 		int get_ID();
 		void set_ID (int id);
+
+		void Door::do_something() { };
 };
 
 #endif

@@ -8,6 +8,7 @@
 // #include "Sprite.h"
 #include "StillSprite.h"
 #include "Door.h"
+#include "Button.h"
 #include <math.h>
 
 SaveState save_state;
@@ -32,7 +33,7 @@ StillSprite statue (48, 96, 5);
 
 bool keys_visible = true;
 bool bounding_box_visible = false;
-bool stop_box_visible = true;
+bool stop_box_visible = false;
 
 StillSprite spell (260, 260, 6);
 
@@ -43,6 +44,7 @@ StillSprite f_wind_warpball (260, 260, 6);
 StillSprite warp (260, 260, 6);
 
 Door door (58, 63, 0, 0, up, locked);
+Button button (toggle, -1);
 
 void scan_virtual_keyboard();
 void cast_Dins_Fire();
@@ -76,7 +78,7 @@ StillSprite spirit_map (TILE_SIZE, TILE_SIZE, 3);
 StillSprite shadow_map (TILE_SIZE, TILE_SIZE, 3);
 StillSprite light_map (TILE_SIZE, TILE_SIZE, 3);
 StillSprite home_map (TILE_SIZE, TILE_SIZE, 3);
-MapParser map_parser (&sprite_list_head, &forest_map, &fire_map, &water_map, &spirit_map, &shadow_map, &light_map, &home_map, &door);
+MapParser map_parser (&sprite_list_head, &forest_map, &fire_map, &water_map, &spirit_map, &shadow_map, &light_map, &home_map, &door, &button);
 
 bool has_generated_map = false;
 bool see_generated_map = true;
@@ -124,6 +126,7 @@ void load_images()
 	Epona.set_position (360, BIG_SCREEN ? 700 : 230);
 
 	door.load (CO, "Door.png");
+	button.load (TR, "Button.png");
 
 	water_map.load (TR, "Água3.png");
 
@@ -516,7 +519,11 @@ void main_loop()
 	door.copy_subclass_data (door_ptr);*/
 
 	
-
+	button.set_position (500, 200);
+	button.set_ptr (NULL);
+	button.set_frame_w (16);
+	button.set_frame_h (16);
+	sprite_list_head.insert_node (&button);
 
 
 
@@ -583,11 +590,14 @@ void main_loop()
 		sprite_list_head.print_whole_list();
 		print_list = false;
 	};
-	//sprite_list_head.draw_list (&iGraph);
 
+	//do_something
+
+	//sprite_list_head.draw_list (&iGraph);
 	Sprite* sprite_to_draw = sprite_list_head.get_ptr();
 	while (sprite_to_draw != NULL)
 	{
+		sprite_to_draw->do_something();
 		sprite_to_draw->draw_node(&iGraph);
 		sprite_to_draw = sprite_to_draw->get_ptr();
 	};

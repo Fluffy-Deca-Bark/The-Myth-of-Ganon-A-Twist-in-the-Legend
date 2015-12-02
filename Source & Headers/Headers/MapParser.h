@@ -4,16 +4,18 @@
 #include "MapNode.h"
 #include "StillSprite.h"
 #include "Door.h"
+#include "Button.h"
 
 class MapParser
 {
 	private:
 
 		Sprite* list_head;
-		Sprite* map[7]; /*[6] = G's Castle*/
+		Sprite* map[7]; /*[6] = Ganondorf's Castle*/
 		Sprite* working_map;
 		Sprite* last_added_tile;
 		Door* door;
+		Button* button;
 		bool keep_last_added_tile;
 		int current_layer;
 		StillSprite buffer_sprite;
@@ -21,7 +23,7 @@ class MapParser
 
 	public:
 	
-		MapParser (Sprite* head, Sprite* forest, Sprite* fire, Sprite* water, Sprite* spirit, Sprite* shadow, Sprite* light, Sprite* home, Door* door_ptr);
+		MapParser (Sprite* head, Sprite* forest, Sprite* fire, Sprite* water, Sprite* spirit, Sprite* shadow, Sprite* light, Sprite* home, Door* door_ptr, Button* button_ptr);
 
 		void parse();
 
@@ -37,7 +39,7 @@ class MapParser
 		void Stop (int x, int y, int w, int h);
 		void Layer (int l);
 		void PutDoor (door_state s, direction d, int x, int y, int id);
-
+		void PutButton (button_type t, int x, int y, int id);
 		int p_atoi (char* c);
 
 		Sprite* get_working_map();

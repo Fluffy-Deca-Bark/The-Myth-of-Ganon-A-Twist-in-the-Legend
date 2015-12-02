@@ -1,7 +1,7 @@
 Assign_file (5, Chão.png)
 Select (5)
 Layer (0)
-Stretch4 (24, 14, *1, *4, 88, 45)
+.Stretch4 (24, 14, *1, *4, 88, 45)
 
 Assign_file (6, Ruínas.png)
 Select	(6)
@@ -34,3 +34,7 @@ Layer (5)
 Door	(barred, up, 691, 50, 1)
 Door	(locked, up, 791, 50, 2)
 Door	(open, up, 591, 50, 3)
+
+Button (hold, 500, 300, 1)
+
+Button (toggle, 520, 300, 2)

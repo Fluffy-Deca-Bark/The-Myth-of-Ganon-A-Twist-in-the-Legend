@@ -23,7 +23,6 @@ Door* Door::create_node (Sprite* s)
 	copy_base_data (p);
 	copy_subclass_data (p);
 	p->set_ptr (s);
-	ID = -1;
 	return p;
 };
 
